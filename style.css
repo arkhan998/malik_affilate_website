@@ -1,0 +1,34 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f2f5;
+    color: #333;
+}
+header {
+    padding: 20px;
+}
+.affiliate-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+.product {
+    border: 1px solid #ddd;
+    padding: 20px;
+    width: 200px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+.button {
+    display: inline-block;
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #0073e6;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.button:hover {
+    background-color: #005bb5;
+}
