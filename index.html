@@ -3,28 +3,864 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Affiliate Page</title>
-    <link rel="stylesheet" href="style.css">
+    <title>MALIK SAHAB - Advanced Media Downloader</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+            --dark-bg: #111827;
+            --card-bg: #1f2937;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-glow: rgba(79, 70, 229, 0.6);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+        }
+        
+        .brand-text {
+            background: linear-gradient(90deg, #4f46e5, #10b981);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-tab {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #4f46e5, #10b981);
+            border-radius: 2px;
+        }
+        
+        .glow-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .glow-button:hover::before {
+            opacity: 0.2;
+        }
+        
+        .glow-button::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .glow-button:hover::after {
+            opacity: 1;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .input-glow:focus {
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        
+        .premium-badge {
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .floating-animation {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% {
+                transform: translate(0, 0px);
+            }
+            50% {
+                transform: translate(0, 15px);
+            }
+            100% {
+                transform: translate(0, -0px);
+            }
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .format-option {
+            position: relative;
+        }
+        
+        .format-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .format-option label {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            background-color: rgba(31, 41, 55, 0.8);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .format-option input[type="radio"]:checked + label {
+            background: linear-gradient(90deg, rgba(79, 70, 229, 0.2), rgba(16, 185, 129, 0.2));
+            border-color: var(--primary-color);
+        }
+        
+        .format-option:hover label {
+            background-color: rgba(55, 65, 81, 0.8);
+        }
+        
+        .loading-indicator {
+            display: none;
+        }
+        
+        .loading .loading-indicator {
+            display: flex;
+        }
+        
+        .loading .btn-text {
+            display: none;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h1>Welcome to My Affiliate Website</h1>
-        <p>Check out my recommended products below!</p>
-    </header>
-    <main>
-        <section class="affiliate-links">
-            <div class="product">
-                <h2>Product 1</h2>
-                <p>Best quality product for your needs.</p>
-                <a href="YOUR_AFFILIATE_LINK_1" target="_blank" class="button">Buy Now</a>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-center mb-10">
+            <div class="flex items-center mb-6 md:mb-0">
+                <h1 class="text-4xl font-bold brand-text">MALIK SAHAB</h1>
+                <span class="ml-3 premium-badge">PREMIUM</span>
             </div>
-            <div class="product">
-                <h2>Product 2</h2>
-                <p>Top-rated product with amazing features.</p>
-                <a href="YOUR_AFFILIATE_LINK_2" target="_blank" class="button">Buy Now</a>
+            <div class="flex space-x-4">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fab fa-whatsapp text-lg"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fab fa-telegram text-lg"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fab fa-youtube text-lg"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fas fa-crown text-yellow-400 text-lg"></i>
+                </a>
             </div>
-        </section>
-    </main>
-    <script src="script.js"></script>
+        </header>
+
+        <!-- Main Content -->
+        <div>
+            <h2 class="text-2xl font-semibold mb-6">Advanced Media Downloader Toolkit</h2>
+            
+            <!-- Navigation Tabs -->
+            <div class="relative border-b border-gray-700 mb-8">
+                <nav class="flex space-x-8 overflow-x-auto pb-2 scrollbar-none">
+                    <button class="nav-tab active text-white pb-2 focus:outline-none" data-tab="youtube">
+                        <i class="fab fa-youtube mr-2 text-red-500"></i> YouTube Downloader
+                    </button>
+                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="website">
+                        <i class="fas fa-globe mr-2 text-blue-400"></i> Website Downloader
+                    </button>
+                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="tiktok">
+                        <i class="fab fa-tiktok mr-2 text-pink-500"></i> TikTok Downloader
+                    </button>
+                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="instagram">
+                        <i class="fab fa-instagram mr-2 text-purple-500"></i> Instagram Downloader
+                    </button>
+                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="facebook">
+                        <i class="fab fa-facebook mr-2 text-blue-500"></i> Facebook Downloader
+                    </button>
+                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="tools">
+                        <i class="fas fa-tools mr-2 text-yellow-500"></i> Tools
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-contents">
+                <!-- YouTube Downloader Tab -->
+                <div id="youtube-tab" class="tab-content active">
+                    <div class="mb-6">
+                        <label for="youtube-url" class="block text-sm font-medium text-gray-300 mb-2">YouTube URL</label>
+                        <div class="flex">
+                            <input type="text" id="youtube-url" placeholder="https://youtu.be/..." class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
+                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
+                                <div class="relative z-10 flex items-center">
+                                    <span class="btn-text">Analyze</span>
+                                    <div class="loading-indicator ml-2">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">
+                            <i class="fas fa-info-circle mr-1"></i> Supports videos, playlists, shorts, and live streams
+                        </div>
+                    </div>
+
+                    <!-- Video Preview (Example) -->
+                    <div class="card p-6 mb-8">
+                        <div class="flex flex-col md:flex-row items-start gap-6">
+                            <div class="w-full md:w-72 h-40 bg-gray-800 rounded-lg overflow-hidden">
+                                <!-- Thumbnail Placeholder -->
+                                <div class="w-full h-full bg-gray-700 flex items-center justify-center">
+                                    <i class="fas fa-play-circle text-gray-500 text-4xl"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-medium mb-2">Video Title Will Appear Here</h3>
+                                <div class="text-sm text-gray-400 mb-2">by Channel Name</div>
+                                <div class="flex items-center gap-4 text-xs text-gray-400 mb-3">
+                                    <div><i class="far fa-clock mr-1"></i> 00:00</div>
+                                    <div><i class="far fa-eye mr-1"></i> 0 views</div>
+                                    <div><i class="far fa-thumbs-up mr-1"></i> 0</div>
+                                    <div><i class="far fa-calendar mr-1"></i> Date</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Download Options -->
+                    <div class="card p-6 mb-6">
+                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
+                        
+                        <div class="mb-6">
+                            <div class="flex space-x-4 mb-4">
+                                <div class="format-option">
+                                    <input type="radio" id="mp4-video" name="format" value="mp4" checked>
+                                    <label for="mp4-video" class="flex items-center">
+                                        <i class="fas fa-video mr-2 text-blue-400"></i> MP4 (Video)
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="mp3-audio" name="format" value="mp3">
+                                    <label for="mp3-audio" class="flex items-center">
+                                        <i class="fas fa-music mr-2 text-green-400"></i> MP3 (Audio)
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="both-formats" name="format" value="both">
+                                    <label for="both-formats" class="flex items-center">
+                                        <i class="fas fa-photo-video mr-2 text-purple-400"></i> Both Formats
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Resolution Options -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                                <div class="format-option">
+                                    <input type="radio" id="res-854x480" name="resolution" value="854x480">
+                                    <label for="res-854x480" class="text-center">
+                                        <div class="font-medium">854x480</div>
+                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="res-640x360" name="resolution" value="640x360">
+                                    <label for="res-640x360" class="text-center">
+                                        <div class="font-medium">640x360</div>
+                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="res-640x360hd" name="resolution" value="640x360hd" checked>
+                                    <label for="res-640x360hd" class="text-center">
+                                        <div class="font-medium">640x360</div>
+                                        <div class="text-xs text-gray-400">(4.52 MB)</div>
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="res-256x144" name="resolution" value="256x144">
+                                    <label for="res-256x144" class="text-center">
+                                        <div class="font-medium">256x144</div>
+                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="res-160x90" name="resolution" value="160x90">
+                                    <label for="res-160x90" class="text-center">
+                                        <div class="font-medium">160x90</div>
+                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="res-80x45" name="resolution" value="80x45">
+                                    <label for="res-80x45" class="text-center">
+                                        <div class="font-medium">80x45</div>
+                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="audio-only" name="resolution" value="audio-only">
+                                    <label for="audio-only" class="text-center">
+                                        <div class="font-medium">Audio Only</div>
+                                        <div class="text-xs text-gray-400">(4.62 MB)</div>
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="audio-only-hq" name="resolution" value="audio-only-hq">
+                                    <label for="audio-only-hq" class="text-center">
+                                        <div class="font-medium">Audio Only</div>
+                                        <div class="text-xs text-gray-400">(4.89 MB)</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Options -->
+                        <div>
+                            <h4 class="text-sm font-medium mb-3">Advanced Options</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="include-metadata" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
+                                    <label for="include-metadata" class="ml-2 text-sm text-gray-300">Include Metadata</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="include-thumbnail" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
+                                    <label for="include-thumbnail" class="ml-2 text-sm text-gray-300">Include Thumbnail</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="include-subtitles" class="w-4 h-4 bg-gray-700 border-gray-600 rounded">
+                                    <label for="include-subtitles" class="ml-2 text-sm text-gray-300">Include Subtitles</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="embed-metadata" class="w-4 h-4 bg-gray-700 border-gray-600 rounded">
+                                    <label for="embed-metadata" class="ml-2 text-sm text-gray-300">Embed Metadata</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Download Button -->
+                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
+                        <div class="relative z-10 flex items-center">
+                            <i class="fas fa-download mr-2"></i>
+                            <span class="btn-text">Download Video</span>
+                            <div class="loading-indicator ml-2">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Website Downloader Tab -->
+                <div id="website-tab" class="tab-content">
+                    <div class="mb-6">
+                        <label for="website-url" class="block text-sm font-medium text-gray-300 mb-2">Website URL</label>
+                        <div class="flex">
+                            <input type="text" id="website-url" placeholder="https://example.com" class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
+                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
+                                <div class="relative z-10 flex items-center">
+                                    <span class="btn-text">Analyze</span>
+                                    <div class="loading-indicator ml-2">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">
+                            <i class="fas fa-info-circle mr-1"></i> Enter any website URL to download its content
+                        </div>
+                    </div>
+
+                    <div class="card p-6 mb-6">
+                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="download-images" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
+                                <label for="download-images" class="ml-2 text-sm text-gray-300">Download Images</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="download-videos" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
+                                <label for="download-videos" class="ml-2 text-sm text-gray-300">Download Videos</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="download-audio" class="w-4 h-4 bg-gray-700 border-gray-600 rounded">
+                                <label for="download-audio" class="ml-2 text-sm text-gray-300">Download Audio Files</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" id="download-documents" class="w-4 h-4 bg-gray-700 border-gray-600 rounded">
+                                <label for="download-documents" class="ml-2 text-sm text-gray-300">Download Documents</label>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <label for="download-depth" class="block text-sm font-medium text-gray-300 mb-2">Crawl Depth</label>
+                            <select id="download-depth" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none input-glow">
+                                <option value="1">Current page only</option>
+                                <option value="2">Current page + linked pages (1 level)</option>
+                                <option value="3">Deep crawl (2 levels)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
+                        <div class="relative z-10 flex items-center">
+                            <i class="fas fa-download mr-2"></i>
+                            <span class="btn-text">Download Website</span>
+                            <div class="loading-indicator ml-2">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- TikTok Downloader Tab -->
+                <div id="tiktok-tab" class="tab-content">
+                    <div class="mb-6">
+                        <label for="tiktok-url" class="block text-sm font-medium text-gray-300 mb-2">TikTok URL</label>
+                        <div class="flex">
+                            <input type="text" id="tiktok-url" placeholder="https://www.tiktok.com/..." class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
+                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
+                                <div class="relative z-10 flex items-center">
+                                    <span class="btn-text">Analyze</span>
+                                    <div class="loading-indicator ml-2">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">
+                            <i class="fas fa-info-circle mr-1"></i> Supports TikTok videos, including watermark removal
+                        </div>
+                    </div>
+
+                    <div class="card p-6 mb-6">
+                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
+                        <div class="mb-6">
+                            <div class="flex flex-wrap gap-4">
+                                <div class="format-option">
+                                    <input type="radio" id="tiktok-with-watermark" name="tiktok-watermark" value="with">
+                                    <label for="tiktok-with-watermark" class="flex items-center">
+                                        <i class="fas fa-stamp mr-2 text-red-400"></i> With Watermark
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="tiktok-without-watermark" name="tiktok-watermark" value="without" checked>
+                                    <label for="tiktok-without-watermark" class="flex items-center">
+                                        <i class="fas fa-ban mr-2 text-green-400"></i> Without Watermark
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="tiktok-audio-only" name="tiktok-watermark" value="audio">
+                                    <label for="tiktok-audio-only" class="flex items-center">
+                                        <i class="fas fa-music mr-2 text-blue-400"></i> Audio Only
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
+                        <div class="relative z-10 flex items-center">
+                            <i class="fas fa-download mr-2"></i>
+                            <span class="btn-text">Download TikTok</span>
+                            <div class="loading-indicator ml-2">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Instagram Downloader Tab -->
+                <div id="instagram-tab" class="tab-content">
+                    <div class="mb-6">
+                        <label for="instagram-url" class="block text-sm font-medium text-gray-300 mb-2">Instagram URL</label>
+                        <div class="flex">
+                            <input type="text" id="instagram-url" placeholder="https://www.instagram.com/..." class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
+                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
+                                <div class="relative z-10 flex items-center">
+                                    <span class="btn-text">Analyze</span>
+                                    <div class="loading-indicator ml-2">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">
+                            <i class="fas fa-info-circle mr-1"></i> Supports posts, reels, stories, and IGTV videos
+                        </div>
+                    </div>
+
+                    <div class="card p-6 mb-6">
+                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
+                        <div class="mb-6">
+                            <div class="flex flex-wrap gap-4">
+                                <div class="format-option">
+                                    <input type="radio" id="insta-high-quality" name="insta-quality" value="high" checked>
+                                    <label for="insta-high-quality" class="flex items-center">
+                                        <i class="fas fa-star mr-2 text-yellow-400"></i> High Quality
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="insta-medium-quality" name="insta-quality" value="medium">
+                                    <label for="insta-medium-quality" class="flex items-center">
+                                        <i class="fas fa-star-half-alt mr-2 text-yellow-400"></i> Medium Quality
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="insta-low-quality" name="insta-quality" value="low">
+                                    <label for="insta-low-quality" class="flex items-center">
+                                        <i class="far fa-star mr-2 text-yellow-400"></i> Low Quality
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="download-all-slides" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
+                                <label for="download-all-slides" class="ml-2 text-sm text-gray-300">Download All Slides (for carousel posts)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
+                        <div class="relative z-10 flex items-center">
+                            <i class="fas fa-download mr-2"></i>
+                            <span class="btn-text">Download Instagram</span>
+                            <div class="loading-indicator ml-2">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Facebook Downloader Tab -->
+                <div id="facebook-tab" class="tab-content">
+                    <div class="mb-6">
+                        <label for="facebook-url" class="block text-sm font-medium text-gray-300 mb-2">Facebook URL</label>
+                        <div class="flex">
+                            <input type="text" id="facebook-url" placeholder="https://www.facebook.com/..." class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
+                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
+                                <div class="relative z-10 flex items-center">
+                                    <span class="btn-text">Analyze</span>
+                                    <div class="loading-indicator ml-2">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">
+                            <i class="fas fa-info-circle mr-1"></i> Supports videos, photos, stories, and reels
+                        </div>
+                    </div>
+
+                    <div class="card p-6 mb-6">
+                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
+                        <div class="mb-6">
+                            <div class="flex flex-wrap gap-4">
+                                <div class="format-option">
+                                    <input type="radio" id="fb-hd-quality" name="fb-quality" value="hd" checked>
+                                    <label for="fb-hd-quality" class="flex items-center">
+                                        <i class="fas fa-film mr-2 text-blue-400"></i> HD Quality
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="fb-sd-quality" name="fb-quality" value="sd">
+                                    <label for="fb-sd-quality" class="flex items-center">
+                                        <i class="fas fa-video mr-2 text-blue-400"></i> SD Quality
+                                    </label>
+                                </div>
+                                <div class="format-option">
+                                    <input type="radio" id="fb-audio-only" name="fb-quality" value="audio">
+                                    <label for="fb-audio-only" class="flex items-center">
+                                        <i class="fas fa-music mr-2 text-blue-400"></i> Audio Only
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
+                        <div class="relative z-10 flex items-center">
+                            <i class="fas fa-download mr-2"></i>
+                            <span class="btn-text">Download Facebook</span>
+                            <div class="loading-indicator ml-2">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Tools Tab -->
+                <div id="tools-tab" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="card p-6 hover:bg-gray-800 transition">
+                            <div class="text-3xl mb-4 text-blue-400">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <h3 class="text-lg font-medium mb-2">Video Converter</h3>
+                            <p class="text-sm text-gray-400 mb-4">Convert videos between different formats including MP4, MKV, AVI, and more.</p>
+                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                        </div>
+                        <div class="card p-6 hover:bg-gray-800 transition">
+                            <div class="text-3xl mb-4 text-green-400">
+                                <i class="fas fa-music"></i>
+                            </div>
+                            <h3 class="text-lg font-medium mb-2">Audio Converter</h3>
+                            <p class="text-sm text-gray-400 mb-4">Convert audio files between MP3, WAV, FLAC, AAC and other formats.</p>
+                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                        </div>
+                        <div class="card p-6 hover:bg-gray-800 transition">
+                            <div class="text-3xl mb-4 text-red-400">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <h3 class="text-lg font-medium mb-2">Video Trimmer</h3>
+                            <p class="text-sm text-gray-400 mb-4">Cut and trim videos to your desired length without quality loss.</p>
+                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                        </div>
+                        <div class="card p-6 hover:bg-gray-800 transition">
+                            <div class="text-3xl mb-4 text-yellow-400">
+                                <i class="fas fa-closed-captioning"></i>
+                            </div>
+                            <h3 class="text-lg font-medium mb-2">Subtitle Generator</h3>
+                            <p class="text-sm text-gray-400 mb-4">Automatically generate subtitles for your videos using AI technology.</p>
+                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                        </div>
+                        <div class="card p-6 hover:bg-gray-800 transition">
+                            <div class="text-3xl mb-4 text-purple-400">
+                                <i class="fas fa-compress-arrows-alt"></i>
+                            </div>
+                            <h3 class="text-lg font-medium mb-2">Video Compressor</h3>
+                            <p class="text-sm text-gray-400 mb-4">Reduce video file size while maintaining good quality for easy sharing.</p>
+                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                        </div>
+                        <div class="card p-6 hover:bg-gray-800 transition">
+                            <div class="text-3xl mb-4 text-pink-400">
+                                <i class="fas fa-images"></i>
+                            </div>
+                            <h3 class="text-lg font-medium mb-2">Image Extractor</h3>
+                            <p class="text-sm text-gray-400 mb-4">Extract all images from videos and create high-quality screenshots.</p>
+                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-16 border-t border-gray-800 pt-8 pb-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 brand-text">MALIK SAHAB</h3>
+                    <p class="text-sm text-gray-400">Advanced media downloader toolkit with support for multiple platforms. Download videos, audio, and more with just a few clicks.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-white transition">Features</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-white transition">Help & Support</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-white transition">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                    <p class="text-xs text-gray-500">© 2025 MALIK SAHAB. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabBtns = document.querySelectorAll('.nav-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    
+                    // Update active button
+                    tabBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.classList.add('text-gray-400');
+                        b.classList.remove('text-white');
+                    });
+                    
+                    btn.classList.add('active');
+                    btn.classList.add('text-white');
+                    btn.classList.remove('text-gray-400');
+                    
+                    // Update active content
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Button loading state simulation
+            const actionButtons = document.querySelectorAll('.glow-button');
+            
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // If it's an "Analyze" button (contains the text "Analyze")
+                    if (this.querySelector('.btn-text').innerText.includes('Analyze')) {
+                        this.classList.add('loading');
+                        
+                        // Simulate API request
+                        setTimeout(() => {
+                            this.classList.remove('loading');
+                        }, 1500);
+                    }
+                    // If it's a download button
+                    else if (this.querySelector('.btn-text').innerText.includes('Download')) {
+                        this.classList.add('loading');
+                        
+                        // Simulate download process
+                        setTimeout(() => {
+                            this.classList.remove('loading');
+                            // You would trigger the actual download here
+                        }, 2000);
+                    }
+                });
+            });
+            
+            // Input validation for URL fields
+            const urlInputs = document.querySelectorAll('input[type="text"][id$="-url"]');
+            
+            urlInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const value = this.value.trim();
+                    const analyzeBtn = this.parentElement.querySelector('.glow-button');
+                    
+                    if (value && (value.startsWith('http://') || value.startsWith('https://'))) {
+                        analyzeBtn.disabled = false;
+                    } else {
+                        analyzeBtn.disabled = true;
+                    }
+                });
+                
+                // Trigger the input event to set initial state
+                input.dispatchEvent(new Event('input'));
+            });
+            
+            // Mouseenter glow effect
+            const glowElement = document.createElement('div');
+            glowElement.classList.add('glow-effect');
+            document.body.appendChild(glowElement);
+            
+            document.addEventListener('mousemove', (e) => {
+                // Only show glow effect on interactive elements
+                const target = e.target;
+                const isInteractive = target.classList.contains('glow-button') || 
+                                     target.closest('.glow-button') || 
+                                     target.classList.contains('nav-tab') ||
+                                     target.classList.contains('format-option');
+                
+                if (isInteractive) {
+                    const rect = target.getBoundingClientRect();
+                    const x = rect.left + rect.width / 2;
+                    const y = rect.top + rect.height / 2;
+                    
+                    glowElement.style.left = `${x - 75}px`;
+                    glowElement.style.top = `${y - 75}px`;
+                    glowElement.style.opacity = '0.3';
+                } else {
+                    glowElement.style.opacity = '0';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
