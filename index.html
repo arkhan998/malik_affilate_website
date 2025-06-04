@@ -102,7 +102,7 @@
     <header class="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-6 shadow-lg">
         <div class="container flex justify-between items-center">
             <h1 class="text-3xl font-bold tracking-tight">MALIK Tools Hub</h1>
-            <p class="text-lg hidden md:block">Aapke sabhi zaroori tools, ek hi jaga par.</p>
+            <p class="text-lg hidden md:block">آپ کے سبھی ضروری ٹولز، ایک ہی جگہ پر۔</p>
         </div>
     </header>
 
@@ -110,40 +110,40 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- URL Shortener Section -->
             <section class="card">
-                <h2 class="text-2xl font-semibold mb-6 text-gray-800">Apna Link Chota Karein</h2>
+                <h2 class="text-2xl font-semibold mb-6 text-gray-800">اپنا لنک چھوٹا کریں</h2>
                 <div class="mb-4">
-                    <label for="longUrl" class="block text-gray-700 text-sm font-medium mb-2">Lamba URL daalein:</label>
-                    <input type="text" id="longUrl" placeholder="https://aapki-lambi-website-link.com" class="w-full">
+                    <label for="longUrl" class="block text-gray-700 text-sm font-medium mb-2">لمبا URL ڈالیں:</label>
+                    <input type="text" id="longUrl" placeholder="https://آپ کی لمبی ویب سائٹ لنک.com" class="w-full">
                 </div>
-                <button id="shortenBtn" class="btn w-full mb-4">Shorten Karein</button>
+                <button id="shortenBtn" class="btn w-full mb-4">چھوٹا کریں</button>
                 <div id="shortenedUrlDisplay" class="hidden bg-gray-100 p-3 rounded-lg flex items-center justify-between">
                     <span id="shortUrlText" class="text-indigo-700 font-medium break-all mr-4"></span>
-                    <button id="copyBtn" class="btn bg-green-500 hover:bg-green-600 flex-shrink-0">Copy Karein</button>
+                    <button id="copyBtn" class="btn bg-green-500 hover:bg-green-600 flex-shrink-0">کاپی کریں</button>
                 </div>
                 <p id="urlError" class="text-red-500 text-sm mt-2 hidden"></p>
             </section>
 
             <!-- AI Chatbot Section -->
             <section class="card flex flex-col h-full">
-                <h2 class="text-2xl font-semibold mb-6 text-gray-800">AI Chatbot Se Baat Karein</h2>
+                <h2 class="text-2xl font-semibold mb-6 text-gray-800">AI چیٹ بوٹ سے بات کریں</h2>
                 <div id="chatDisplay" class="flex-grow bg-gray-50 p-4 rounded-lg mb-4 overflow-y-auto h-80 flex flex-col space-y-2">
                     <!-- Chat messages will be appended here -->
-                    <div class="bot-message chat-message">Assalam-o-Alaikum! Main aapka AI Chatbot hun. Kaise madad kar sakta hun?</div>
+                    <div class="bot-message chat-message">السلام علیکم! میں آپ کا AI چیٹ بوٹ ہوں۔ کیسے مدد کر سکتا ہوں؟</div>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <input type="text" id="chatInput" placeholder="Apna message type karein..." class="flex-grow">
-                    <button id="sendBtn" class="btn flex-shrink-0">Bhejein</button>
+                    <input type="text" id="chatInput" placeholder="اپنا پیغام ٹائپ کریں..." class="flex-grow">
+                    <button id="sendBtn" class="btn flex-shrink-0">بھیجیں</button>
                 </div>
                 <p id="chatError" class="text-red-500 text-sm mt-2 hidden"></p>
-                <div id="loadingIndicator" class="text-center text-indigo-600 mt-2 hidden">Loading...</div>
+                <div id="loadingIndicator" class="text-center text-indigo-600 mt-2 hidden">لوڈنگ...</div>
             </section>
         </div>
     </main>
 
     <footer class="bg-gray-800 text-white py-6 mt-auto">
         <div class="container text-center text-gray-400">
-            <p>&copy; 2025 MALIK Tools Hub. Sab haq mehfooz hain.</p>
-            <p class="text-sm mt-2">Powered by FAMOFC APIs</p>
+            <p>&copy; 2025 MALIK Tools Hub. تمام حقوق محفوظ ہیں۔</p>
+            <p class="text-sm mt-2">FAMOFC APIs کے ذریعے تقویت یافتہ</p>
         </div>
     </footer>
 
@@ -174,7 +174,7 @@
             shortenedUrlDisplay.classList.add('hidden'); // Hide previous result
 
             if (!longUrl) {
-                urlError.textContent = "Meharbani kar ke koi URL daalein.";
+                urlError.textContent = "مہربانی کر کے کوئی URL ڈالیں۔";
                 urlError.classList.remove('hidden');
                 return;
             }
@@ -183,39 +183,54 @@
             try {
                 new URL(longUrl);
             } catch (e) {
-                urlError.textContent = "Ghalat URL format. Meharbani kar ke sahi URL daalein (maslan: https://example.com).";
+                urlError.textContent = "غلط URL فارمیٹ۔ مہربانی کر کے صحیح URL ڈالیں (مثلاً: https://example.com)۔";
                 urlError.classList.remove('hidden');
                 return;
             }
 
-            shortenBtn.textContent = "Shorten Ho Raha Hai...";
+            shortenBtn.textContent = "چھوٹا ہو رہا ہے...";
             shortenBtn.disabled = true;
 
             try {
-                // Fetch call to the URL shortener API
                 const response = await fetch(`${shortenApiUrl}${encodeURIComponent(longUrl)}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.text(); // API returns plain text
 
-                // Check if the response is a valid URL or an error message
-                if (data.startsWith('http')) {
+                // Attempt to parse as JSON first
+                let data;
+                try {
+                    data = await response.json(); // Try parsing as JSON
+                } catch (jsonError) {
+                    // If JSON parsing fails, try to get it as plain text
+                    data = await response.text();
+                    // If it's still not a URL, it's an error
+                    if (!data.startsWith('http')) {
+                        throw new Error(`API returned unexpected format or error: ${data}`);
+                    }
+                    // If it's a URL in plain text, use it directly
                     shortUrlText.textContent = data;
                     shortenedUrlDisplay.classList.remove('hidden');
-                    showMessageBox("Link chota ho gaya!");
+                    showMessageBox("لنک چھوٹا ہو گیا!");
+                    return; // Exit function if plain text URL is found
+                }
+
+                // If JSON parsing was successful
+                if (data && data.shortUrl) {
+                    shortUrlText.textContent = data.shortUrl;
+                    shortenedUrlDisplay.classList.remove('hidden');
+                    showMessageBox("لنک چھوٹا ہو گیا!");
                 } else {
-                    // Assuming any non-URL response is an error from the API
-                    throw new Error(`API error: ${data}`);
+                    throw new Error(`API returned invalid JSON response: ${JSON.stringify(data)}`);
                 }
 
             } catch (error) {
                 console.error("URL Shortener Error:", error);
-                urlError.textContent = `Link chota karne mein masla hua: ${error.message}. Dobara koshish karein.`;
+                urlError.textContent = `لنک چھوٹا کرنے میں مسئلہ ہوا: ${error.message}۔ دوبارہ کوشش کریں۔`;
                 urlError.classList.remove('hidden');
-                showMessageBox("Link chota karne mein masla hua!");
+                showMessageBox("لنک چھوٹا کرنے میں مسئلہ ہوا!");
             } finally {
-                shortenBtn.textContent = "Shorten Karein";
+                shortenBtn.textContent = "چھوٹا کریں";
                 shortenBtn.disabled = false;
             }
         });
@@ -230,10 +245,10 @@
                 textArea.select();
                 try {
                     document.execCommand('copy');
-                    showMessageBox("Link copy ho gaya!");
+                    showMessageBox("لنک کاپی ہو گیا!");
                 } catch (err) {
                     console.error('Copy to clipboard failed:', err);
-                    showMessageBox("Link copy nahi ho saka. Barah-e-meharbani khud copy karein.");
+                    showMessageBox("لنک کاپی نہیں ہو سکا۔ براہ کرم خود کاپی کریں۔");
                 }
                 document.body.removeChild(textArea);
             }
@@ -274,7 +289,7 @@
             chatError.classList.add('hidden'); // Hide previous errors
 
             if (!userMessage) {
-                chatError.textContent = "Meharbani kar ke koi message type karein.";
+                chatError.textContent = "مہربانی کر کے کوئی پیغام ٹائپ کریں۔";
                 chatError.classList.remove('hidden');
                 return;
             }
@@ -285,19 +300,23 @@
             loadingIndicator.classList.remove('hidden');
 
             try {
-                // Fetch call to the AI chatbot API
                 const response = await fetch(`${chatbotApiUrl}${encodeURIComponent(userMessage)}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const botResponse = await response.text(); // API returns plain text
 
-                addMessage(botResponse, 'bot');
+                if (botResponse) {
+                    addMessage(botResponse, 'bot');
+                } else {
+                    throw new Error("API سے خالی جواب ملا۔");
+                }
+
             } catch (error) {
                 console.error("Chatbot Error:", error);
-                chatError.textContent = `Jawab hasil karne mein masla hua: ${error.message}. Dobara koshish karein.`;
+                chatError.textContent = `جواب حاصل کرنے میں مسئلہ ہوا: ${error.message}۔ دوبارہ کوشش کریں۔`;
                 chatError.classList.remove('hidden');
-                showMessageBox("Chatbot se baat karne mein masla hua!");
+                showMessageBox("چیٹ بوٹ سے بات کرنے میں مسئلہ ہوا!");
             } finally {
                 sendBtn.disabled = false;
                 loadingIndicator.classList.add('hidden');
