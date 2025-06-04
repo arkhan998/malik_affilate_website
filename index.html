@@ -3,143 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MALIK SAHAB - Professional Media Downloader</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <title>MediaDownload Pro | Download Videos from Any Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
         :root {
-            --primary-color: #3b82f6;
-            --secondary-color: #1e40af;
-            --success-color: #10b981;
-            --danger-color: #ef4444;
-            --warning-color: #f59e0b;
-            --dark-bg: #1f2937;
-            --dark-surface: #374151;
-            --light-bg: #f9fafb;
-            --light-surface: #ffffff;
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --success: #4cc9f0;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --gray: #6c757d;
+            --card-bg: #ffffff;
+            --text-dark: #212529;
+            --text-light: #f8f9fa;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
         }
 
-        .dark {
-            --bg-primary: var(--dark-bg);
-            --bg-secondary: var(--dark-surface);
-            --text-primary: #f9fafb;
-            --text-secondary: #d1d5db;
-            --border-color: #4b5563;
+        .dark-theme {
+            --dark: #f8f9fa;
+            --light: #1a1a2e;
+            --card-bg: #16213e;
+            --text-dark: #f8f9fa;
+            --text-light: #212529;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .light {
-            --bg-primary: var(--light-bg);
-            --bg-secondary: var(--light-surface);
-            --text-primary: #111827;
-            --text-secondary: #6b7280;
-            --border-color: #e5e7eb;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--light) 0%, #e6e9f0 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 20px;
+            transition: var(--transition);
         }
 
-        .card {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+        .dark-theme body {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
         }
 
-        .tab-indicator {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 2px 2px 0 0;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .progress-bar {
-            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
-            height: 4px;
-            border-radius: 2px;
-            transition: width 0.3s ease;
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
         }
 
-        .glassmorphism {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .loading-pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .logo i {
+            font-size: 32px;
+            color: var(--primary);
         }
 
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
-
-        .spinner {
-            border: 3px solid rgba(59, 130, 246, 0.3);
-            border-radius: 50%;
-            border-top: 3px solid var(--primary-color);
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .gradient-text {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
-        .hover-scale {
-            transition: transform 0.2s ease;
+        .logo span {
+            color: var(--danger);
         }
 
-        .hover-scale:hover {
-            transform: scale(1.05);
+        .theme-toggle {
+            background: var(--card-bg);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
 
-        .platform-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
+        .theme-toggle:hover {
+            transform: rotate(15deg);
         }
 
-        .download-item {
-            border: 1px solid var(--border-color);
+        .theme-toggle i {
+            font-size: 22px;
+            color: var(--warning);
+        }
+
+        /* Main Content */
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--danger));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        /* Platform Tabs */
+        .tabs-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .tabs-header {
+            display: flex;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            padding: 0 20px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 18px 28px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            color: white;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: white;
+            border-radius: 2px 2px 0 0;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            padding: 30px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .url-input {
+            display: flex;
+            gap: 12px;
+        }
+
+        .url-input input {
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            font-size: 16px;
+            transition: var(--transition);
+            background: var(--card-bg);
+            color: var(--text-dark);
+        }
+
+        .url-input input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.15);
+        }
+
+        .url-input button {
+            padding: 0 28px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .url-input button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Supported Platforms */
+        .platforms {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .platform {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(67, 97, 238, 0.08);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .platform:hover {
+            background: rgba(67, 97, 238, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .platform i {
+            font-size: 32px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+        }
+
+        .platform.youtube i { background: #FF0000; }
+        .platform.tiktok i { background: #000000; }
+        .platform.instagram i { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .platform.facebook i { background: #1877F2; }
+        .platform.twitter i { background: #1DA1F2; }
+        .platform.whatsapp i { background: #25D366; }
+        .platform.pinterest i { background: #BD081C; }
+
+        .platform span {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon i {
+            font-size: 32px;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            text-align: center;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 80px;
+            font-weight: 800;
+            color: rgba(67, 97, 238, 0.08);
+            z-index: 1;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-icon i {
+            font-size: 32px;
+            color: white;
+        }
+
+        .step h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            position: relative;
+            z-index: 2;
+        }
+
+        .step p {
+            color: var(--gray);
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Results Section */
+        .results-container {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .video-preview {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .video-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .video-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        .format-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .format-option {
+            background: rgba(67, 97, 238, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .format-option:hover {
+            background: rgba(67, 97, 238, 0.15);
+        }
+
+        .format-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .format-type {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .format-quality {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .download-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
             border-radius: 8px;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .download-item:hover {
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        .download-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
         }
 
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--gray);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--danger);
+        }
+
+        /* Toast Notification */
         .toast {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
+            background: var(--card-bg);
+            color: var(--text-dark);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
             z-index: 1000;
-            min-width: 300px;
-            transform: translateX(400px);
+            transform: translateX(200%);
             transition: transform 0.3s ease;
         }
 
@@ -147,992 +558,575 @@
             transform: translateX(0);
         }
 
-        .quality-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        .toast i {
+            font-size: 20px;
         }
 
-        .quality-4k { background-color: #dc2626; color: white; }
-        .quality-hd { background-color: #ea580c; color: white; }
-        .quality-sd { background-color: #65a30d; color: white; }
-        .quality-audio { background-color: #7c3aed; color: white; }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        .toast.success {
+            border-left: 4px solid var(--success);
         }
 
-        .error-input {
-            border-color: var(--danger-color) !important;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        .toast.error {
+            border-left: 4px solid var(--danger);
         }
 
-        .tab-content {
-            min-height: 400px;
+        .toast.warning {
+            border-left: 4px solid var(--warning);
         }
 
-        .media-thumbnail {
-            width: 120px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 6px;
+        /* Loader */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 30px;
         }
 
-        .format-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(67, 97, 238, 0.2);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 32px;
+            }
+            
+            .tabs-header {
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                padding: 14px 20px;
+                font-size: 14px;
+            }
+            
+            .url-input {
+                flex-direction: column;
+            }
+            
+            .url-input button {
+                padding: 16px;
+            }
         }
     </style>
 </head>
-<body class="light">
-    <!-- Theme Toggle -->
-    <div class="fixed top-4 right-4 z-50">
-        <button id="themeToggle" class="p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300">
-            <i class="fas fa-moon dark:hidden"></i>
-            <i class="fas fa-sun hidden dark:block"></i>
-        </button>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">
-        <div class="card p-4 shadow-lg rounded-lg">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <i id="toast-icon" class="fas fa-check-circle text-green-500"></i>
-                    <span id="toast-message">Success message</span>
-                </div>
-                <button onclick="hideToast()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times"></i>
-                </button>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-cloud-download-alt"></i>
+                <h1>Media<span>Download</span> Pro</h1>
             </div>
-        </div>
-    </div>
-
-    <div class="min-h-screen">
-        <!-- Header -->
-        <header class="py-8 px-4">
-            <div class="max-w-6xl mx-auto text-center">
-                <h1 class="text-4xl md:text-5xl font-bold gradient-text mb-2">
-                    <i class="fas fa-crown text-yellow-500 mr-2"></i>
-                    MALIK SAHAB
-                </h1>
-                <p class="text-xl text-gray-600 dark:text-gray-400">Professional Media Downloader Toolkit</p>
-                <div class="flex justify-center items-center space-x-4 mt-4">
-                    <span class="flex items-center space-x-1 text-sm text-gray-500">
-                        <i class="fas fa-shield-alt text-green-500"></i>
-                        <span>Secure</span>
-                    </span>
-                    <span class="flex items-center space-x-1 text-sm text-gray-500">
-                        <i class="fas fa-bolt text-yellow-500"></i>
-                        <span>Fast</span>
-                    </span>
-                    <span class="flex items-center space-x-1 text-sm text-gray-500">
-                        <i class="fas fa-star text-blue-500"></i>
-                        <span>Professional</span>
-                    </span>
-                </div>
-            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
         </header>
 
-        <!-- Main Content -->
-        <main class="max-w-6xl mx-auto px-4">
-            <!-- Tabs -->
-            <div class="relative mb-8">
-                <div class="flex space-x-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg overflow-x-auto">
-                    <button class="tab-btn active flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="youtube">
-                        <i class="fab fa-youtube text-red-500"></i>
+        <section class="hero">
+            <h2>Download Videos from Any Platform</h2>
+            <p>Fast, secure, and unlimited downloads from YouTube, TikTok, Instagram, Facebook, Twitter, and 100+ other platforms in HD quality</p>
+        </section>
+
+        <section class="tabs-container">
+            <div class="tabs-header">
+                <button class="tab-btn active" data-tab="youtube">
+                    <i class="fab fa-youtube"></i> YouTube
+                </button>
+                <button class="tab-btn" data-tab="tiktok">
+                    <i class="fab fa-tiktok"></i> TikTok
+                </button>
+                <button class="tab-btn" data-tab="instagram">
+                    <i class="fab fa-instagram"></i> Instagram
+                </button>
+                <button class="tab-btn" data-tab="facebook">
+                    <i class="fab fa-facebook"></i> Facebook
+                </button>
+                <button class="tab-btn" data-tab="twitter">
+                    <i class="fab fa-twitter"></i> Twitter
+                </button>
+            </div>
+
+            <div class="tab-content active" id="youtube-tab">
+                <div class="input-group">
+                    <label>Enter YouTube Video URL</label>
+                    <div class="url-input">
+                        <input type="url" placeholder="https://www.youtube.com/watch?v=..." id="youtubeUrl">
+                        <button id="downloadYoutube">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+
+                <div class="platforms">
+                    <div class="platform youtube" data-platform="youtube">
+                        <i class="fab fa-youtube"></i>
                         <span>YouTube</span>
-                    </button>
-                    <button class="tab-btn flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="tiktok">
+                    </div>
+                    <div class="platform tiktok" data-platform="tiktok">
                         <i class="fab fa-tiktok"></i>
                         <span>TikTok</span>
-                    </button>
-                    <button class="tab-btn flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="instagram">
-                        <i class="fab fa-instagram text-pink-500"></i>
+                    </div>
+                    <div class="platform instagram" data-platform="instagram">
+                        <i class="fab fa-instagram"></i>
                         <span>Instagram</span>
-                    </button>
-                    <button class="tab-btn flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="facebook">
-                        <i class="fab fa-facebook text-blue-600"></i>
+                    </div>
+                    <div class="platform facebook" data-platform="facebook">
+                        <i class="fab fa-facebook"></i>
                         <span>Facebook</span>
-                    </button>
-                    <button class="tab-btn flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="twitter">
-                        <i class="fab fa-twitter text-blue-400"></i>
+                    </div>
+                    <div class="platform twitter" data-platform="twitter">
+                        <i class="fab fa-twitter"></i>
                         <span>Twitter</span>
-                    </button>
-                </div>
-                <div class="tab-indicator"></div>
-            </div>
-
-            <!-- Tab Contents -->
-            <div class="space-y-8">
-                <!-- YouTube Tab -->
-                <div id="youtube-tab" class="tab-content active">
-                    <div class="card rounded-xl p-6 shadow-lg">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <i class="fab fa-youtube text-2xl text-red-500"></i>
-                            <h2 class="text-2xl font-bold">YouTube Downloader</h2>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">YouTube URL</label>
-                                <div class="relative">
-                                    <input type="url" id="youtube-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://www.youtube.com/watch?v=...">
-                                    <div class="absolute right-3 top-3">
-                                        <i class="fas fa-link text-gray-400"></i>
-                                    </div>
-                                </div>
-                                <p id="youtube-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid YouTube URL</p>
-                            </div>
-                            
-                            <div class="flex space-x-4">
-                                <button id="youtube-analyze" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-search mr-2"></i>
-                                    Analyze Video
-                                </button>
-                                <button id="youtube-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-paste mr-2"></i>
-                                    Paste
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Loading State -->
-                        <div id="youtube-loading" class="hidden mt-6">
-                            <div class="flex items-center justify-center space-x-3 py-8">
-                                <div class="spinner"></div>
-                                <span>Analyzing video...</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div id="youtube-progress" class="progress-bar w-0"></div>
-                            </div>
-                        </div>
-
-                        <!-- Results -->
-                        <div id="youtube-results" class="hidden mt-6 fade-in">
-                            <div class="border-t pt-6">
-                                <div class="flex items-start space-x-4 mb-6">
-                                    <img id="youtube-thumbnail" class="media-thumbnail" src="" alt="Video thumbnail">
-                                    <div class="flex-1">
-                                        <h3 id="youtube-title" class="text-lg font-semibold mb-2"></h3>
-                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
-                                            <span id="youtube-duration"></span>
-                                            <span id="youtube-views"></span>
-                                            <span id="youtube-channel"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="format-grid" id="youtube-formats">
-                                    <!-- Dynamic format options will be inserted here -->
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                </div>
-
-                <!-- TikTok Tab -->
-                <div id="tiktok-tab" class="tab-content hidden">
-                    <div class="card rounded-xl p-6 shadow-lg">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <i class="fab fa-tiktok text-2xl"></i>
-                            <h2 class="text-2xl font-bold">TikTok Downloader</h2>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">TikTok URL</label>
-                                <div class="relative">
-                                    <input type="url" id="tiktok-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://www.tiktok.com/@username/video/...">
-                                    <div class="absolute right-3 top-3">
-                                        <i class="fas fa-link text-gray-400"></i>
-                                    </div>
-                                </div>
-                                <p id="tiktok-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid TikTok URL</p>
-                            </div>
-                            
-                            <div class="flex space-x-4">
-                                <button id="tiktok-analyze" class="flex-1 bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-search mr-2"></i>
-                                    Analyze Video
-                                </button>
-                                <button id="tiktok-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-paste mr-2"></i>
-                                    Paste
-                                </button>
-                            </div>
-                        </div>
-
-                        <div id="tiktok-loading" class="hidden mt-6">
-                            <div class="flex items-center justify-center space-x-3 py-8">
-                                <div class="spinner"></div>
-                                <span>Analyzing TikTok video...</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div id="tiktok-progress" class="progress-bar w-0"></div>
-                            </div>
-                        </div>
-
-                        <div id="tiktok-results" class="hidden mt-6 fade-in">
-                            <div class="border-t pt-6">
-                                <div class="flex items-start space-x-4 mb-6">
-                                    <img id="tiktok-thumbnail" class="media-thumbnail" src="" alt="Video thumbnail">
-                                    <div class="flex-1">
-                                        <h3 id="tiktok-title" class="text-lg font-semibold mb-2"></h3>
-                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
-                                            <span id="tiktok-author"></span>
-                                            <span id="tiktok-likes"></span>
-                                            <span id="tiktok-duration"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="format-grid" id="tiktok-formats">
-                                    <!-- Dynamic format options will be inserted here -->
-                                </div>
-                            </div>
-                        </div>
+                    <div class="platform whatsapp" data-platform="whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
                     </div>
-                </div>
-
-                <!-- Instagram Tab -->
-                <div id="instagram-tab" class="tab-content hidden">
-                    <div class="card rounded-xl p-6 shadow-lg">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <i class="fab fa-instagram text-2xl text-pink-500"></i>
-                            <h2 class="text-2xl font-bold">Instagram Downloader</h2>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Instagram URL</label>
-                                <div class="relative">
-                                    <input type="url" id="instagram-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://www.instagram.com/p/...">
-                                    <div class="absolute right-3 top-3">
-                                        <i class="fas fa-link text-gray-400"></i>
-                                    </div>
-                                </div>
-                                <p id="instagram-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid Instagram URL</p>
-                            </div>
-                            
-                            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-                                <div class="flex items-start space-x-3">
-                                    <i class="fas fa-info-circle text-yellow-600 mt-0.5"></i>
-                                    <div class="text-sm">
-                                        <p class="font-medium text-yellow-800 dark:text-yellow-200">Supported Content:</p>
-                                        <ul class="mt-1 text-yellow-700 dark:text-yellow-300">
-                                            <li>• Photos and Videos</li>
-                                            <li>• Stories (within 24 hours)</li>
-                                            <li>• IGTV videos</li>
-                                            <li>• Reels</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex space-x-4">
-                                <button id="instagram-analyze" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-search mr-2"></i>
-                                    Analyze Post
-                                </button>
-                                <button id="instagram-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-paste mr-2"></i>
-                                    Paste
-                                </button>
-                            </div>
-                        </div>
-
-                        <div id="instagram-loading" class="hidden mt-6">
-                            <div class="flex items-center justify-center space-x-3 py-8">
-                                <div class="spinner"></div>
-                                <span>Analyzing Instagram post...</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div id="instagram-progress" class="progress-bar w-0"></div>
-                            </div>
-                        </div>
-
-                        <div id="instagram-results" class="hidden mt-6 fade-in">
-                            <div class="border-t pt-6">
-                                <div class="flex items-start space-x-4 mb-6">
-                                    <img id="instagram-thumbnail" class="media-thumbnail" src="" alt="Post thumbnail">
-                                    <div class="flex-1">
-                                        <h3 id="instagram-title" class="text-lg font-semibold mb-2"></h3>
-                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
-                                            <span id="instagram-author"></span>
-                                            <span id="instagram-type"></span>
-                                            <span id="instagram-date"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="format-grid" id="instagram-formats">
-                                    <!-- Dynamic format options will be inserted here -->
-                                </div>
-                            </div>
-                        </div>
+                    <div class="platform pinterest" data-platform="pinterest">
+                        <i class="fab fa-pinterest"></i>
+                        <span>Pinterest</span>
                     </div>
-                </div>
-
-                <!-- Facebook Tab -->
-                <div id="facebook-tab" class="tab-content hidden">
-                    <div class="card rounded-xl p-6 shadow-lg">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <i class="fab fa-facebook text-2xl text-blue-600"></i>
-                            <h2 class="text-2xl font-bold">Facebook Downloader</h2>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Facebook URL</label>
-                                <div class="relative">
-                                    <input type="url" id="facebook-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://www.facebook.com/...">
-                                    <div class="absolute right-3 top-3">
-                                        <i class="fas fa-link text-gray-400"></i>
-                                    </div>
-                                </div>
-                                <p id="facebook-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid Facebook URL</p>
-                            </div>
-                            
-                            <div class="flex space-x-4">
-                                <button id="facebook-analyze" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-search mr-2"></i>
-                                    Analyze Video
-                                </button>
-                                <button id="facebook-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-paste mr-2"></i>
-                                    Paste
-                                </button>
-                            </div>
-                        </div>
-
-                        <div id="facebook-loading" class="hidden mt-6">
-                            <div class="flex items-center justify-center space-x-3 py-8">
-                                <div class="spinner"></div>
-                                <span>Analyzing Facebook video...</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div id="facebook-progress" class="progress-bar w-0"></div>
-                            </div>
-                        </div>
-
-                        <div id="facebook-results" class="hidden mt-6 fade-in">
-                            <div class="border-t pt-6">
-                                <div class="flex items-start space-x-4 mb-6">
-                                    <img id="facebook-thumbnail" class="media-thumbnail" src="" alt="Video thumbnail">
-                                    <div class="flex-1">
-                                        <h3 id="facebook-title" class="text-lg font-semibold mb-2"></h3>
-                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
-                                            <span id="facebook-author"></span>
-                                            <span id="facebook-views"></span>
-                                            <span id="facebook-duration"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="format-grid" id="facebook-formats">
-                                    <!-- Dynamic format options will be inserted here -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Twitter Tab -->
-                <div id="twitter-tab" class="tab-content hidden">
-                    <div class="card rounded-xl p-6 shadow-lg">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <i class="fab fa-twitter text-2xl text-blue-400"></i>
-                            <h2 class="text-2xl font-bold">Twitter Downloader</h2>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Twitter URL</label>
-                                <div class="relative">
-                                    <input type="url" id="twitter-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://twitter.com/username/status/...">
-                                    <div class="absolute right-3 top-3">
-                                        <i class="fas fa-link text-gray-400"></i>
-                                    </div>
-                                </div>
-                                <p id="twitter-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid Twitter URL</p>
-                            </div>
-                            
-                            <div class="flex space-x-4">
-                                <button id="twitter-analyze" class="flex-1 bg-blue-400 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-search mr-2"></i>
-                                    Analyze Tweet
-                                </button>
-                                <button id="twitter-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
-                                    <i class="fas fa-paste mr-2"></i>
-                                    Paste
-                                </button>
-                            </div>
-                        </div>
-
-                        <div id="twitter-loading" class="hidden mt-6">
-                            <div class="flex items-center justify-center space-x-3 py-8">
-                                <div class="spinner"></div>
-                                <span>Analyzing tweet...</span>
-                            </div>
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                <div id="twitter-progress" class="progress-bar w-0"></div>
-                            </div>
-                        </div>
-
-                        <div id="twitter-results" class="hidden mt-6 fade-in">
-                            <div class="border-t pt-6">
-                                <div class="flex items-start space-x-4 mb-6">
-                                    <img id="twitter-thumbnail" class="media-thumbnail" src="" alt="Tweet media">
-                                    <div class="flex-1">
-                                        <h3 id="twitter-title" class="text-lg font-semibold mb-2"></h3>
-                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
-                                            <span id="twitter-author"></span>
-                                            <span id="twitter-date"></span>
-                                            <span id="twitter-likes"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="format-grid" id="twitter-formats">
-                                    <!-- Dynamic format options will be inserted here -->
-                                </div>
-                            </div>
-                        </div>
+                    <div class="platform">
+                        <i class="fas fa-plus"></i>
+                        <span>100+ More</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Features Section -->
-            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card rounded-xl p-6 text-center hover-scale">
-                    <i class="fas fa-shield-alt text-3xl text-green-500 mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Secure & Safe</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Your privacy is protected. No data stored on our servers.</p>
-                </div>
-                <div class="card rounded-xl p-6 text-center hover-scale">
-                    <i class="fas fa-bolt text-3xl text-yellow-500 mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Lightning Fast</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Download your favorite content in seconds with optimized servers.</p>
-                </div>
-                <div class="card rounded-xl p-6 text-center hover-scale">
-                    <i class="fas fa-mobile-alt text-3xl text-blue-500 mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Mobile Friendly</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Works perfectly on all devices - desktop, tablet, and mobile.</p>
+            <div class="tab-content" id="tiktok-tab">
+                <div class="input-group">
+                    <label>Enter TikTok Video URL</label>
+                    <div class="url-input">
+                        <input type="url" placeholder="https://www.tiktok.com/@username/video/..." id="tiktokUrl">
+                        <button id="downloadTiktok">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
                 </div>
             </div>
-        </main>
 
-        <!-- Footer -->
-        <footer class="mt-16 py-8 border-t border-gray-200 dark:border-gray-700">
-            <div class="max-w-6xl mx-auto px-4 text-center">
-                <div class="flex justify-center items-center space-x-6 mb-4">
-                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
-                        <i class="fab fa-github text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
-                        <i class="fab fa-youtube text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
-                        <i class="fab fa-whatsapp text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
-                        <i class="fab fa-telegram text-xl"></i>
-                    </a>
+            <div class="tab-content" id="instagram-tab">
+                <div class="input-group">
+                    <label>Enter Instagram Post URL</label>
+                    <div class="url-input">
+                        <input type="url" placeholder="https://www.instagram.com/p/..." id="instagramUrl">
+                        <button id="downloadInstagram">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
                 </div>
-                <p class="text-gray-600 dark:text-gray-400">&copy; 2025 MALIK SAHAB. All rights reserved.</p>
-                <p class="text-sm text-gray-500 mt-2">Professional Media Downloader - Made with ❤️</p>
             </div>
+
+            <div class="tab-content" id="facebook-tab">
+                <div class="input-group">
+                    <label>Enter Facebook Video URL</label>
+                    <div class="url-input">
+                        <input type="url" placeholder="https://www.facebook.com/watch/?v=..." id="facebookUrl">
+                        <button id="downloadFacebook">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="twitter-tab">
+                <div class="input-group">
+                    <label>Enter Twitter Video URL</label>
+                    <div class="url-input">
+                        <input type="url" placeholder="https://twitter.com/username/status/..." id="twitterUrl">
+                        <button id="downloadTwitter">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+            <p>Analyzing video and fetching download options...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-container" id="resultsContainer">
+            <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Video thumbnail" class="video-preview" id="videoPreview">
+            <h2 class="video-title" id="videoTitle">How to Build a Media Downloader Website</h2>
+            <div class="video-info">
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <span id="videoDuration">12:45</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-eye"></i>
+                    <span id="videoViews">1.2M views</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-user"></i>
+                    <span id="videoAuthor">Coding Master</span>
+                </div>
+            </div>
+            <h3 class="text-lg font-semibold mb-4 text-center">Available Download Formats</h3>
+            <div class="format-options" id="formatOptions">
+                <!-- Format options will be added dynamically -->
+            </div>
+        </div>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Lightning Fast Downloads</h3>
+                <p>Download videos in seconds with our optimized servers. No speed limits or waiting times.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>100% Secure & Private</h3>
+                <p>Your privacy is our priority. We don't store your data or track your downloads.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <h3>HD Quality Options</h3>
+                <p>Download videos in up to 4K resolution. Choose from multiple quality formats.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2 style="text-align: center; font-size: 32px; margin-bottom: 40px;">How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-copy"></i>
+                    </div>
+                    <h3>Copy Video URL</h3>
+                    <p>Copy the link of the video you want to download from any platform</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-paste"></i>
+                    </div>
+                    <h3>Paste URL</h3>
+                    <p>Paste the copied URL into the input field on our website</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Download</h3>
+                    <p>Choose your preferred format and quality, then download instantly</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">Features</a>
+                <a href="#">Supported Sites</a>
+                <a href="#">FAQ</a>
+                <a href="#">Contact</a>
+            </div>
+            <p>© 2023 MediaDownload Pro. All rights reserved.</p>
+            <p>Disclaimer: This tool is for personal use only. Please respect copyright laws.</p>
         </footer>
     </div>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-info-circle"></i>
+        <span id="toastMessage">This is a notification message</span>
+    </div>
+
     <script>
-        // Global variables
-        let currentTab = 'youtube';
-        let isDarkMode = false;
-
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeTabs();
-            initializeTheme();
-            initializeEventListeners();
-            updateTabIndicator();
-        });
-
-        // Theme management
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            if (savedTheme === 'dark') {
-                toggleTheme();
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            const icon = themeToggle.querySelector('i');
+            
+            if (body.classList.contains('dark-theme')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
             }
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-theme');
+            const icon = themeToggle.querySelector('i');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
         }
-
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark', isDarkMode);
-            document.body.classList.toggle('light', !isDarkMode);
-            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-        }
-
-        // Tab management
-        function initializeTabs() {
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            tabButtons.forEach(btn => {
-                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        
+        // Tab Switching
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons and contents
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = btn.getAttribute('data-tab') + '-tab';
+                document.getElementById(tabId).classList.add('active');
             });
-        }
-
-        function switchTab(tabName) {
-            // Update active button
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active', 'bg-white', 'dark:bg-gray-700', 'shadow-sm');
-                if (btn.dataset.tab === tabName) {
-                    btn.classList.add('active', 'bg-white', 'dark:bg-gray-700', 'shadow-sm');
+        });
+        
+        // Platform Selection
+        const platforms = document.querySelectorAll('.platform');
+        const urlInputs = {
+            youtube: document.getElementById('youtubeUrl'),
+            tiktok: document.getElementById('tiktokUrl'),
+            instagram: document.getElementById('instagramUrl'),
+            facebook: document.getElementById('facebookUrl'),
+            twitter: document.getElementById('twitterUrl')
+        };
+        
+        platforms.forEach(platform => {
+            platform.addEventListener('click', () => {
+                const platformType = platform.getAttribute('data-platform');
+                if (!platformType) return;
+                
+                // Remove active class from all tabs
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Activate the corresponding tab
+                const tabBtn = document.querySelector(`.tab-btn[data-tab="${platformType}"]`);
+                if (tabBtn) {
+                    tabBtn.classList.add('active');
+                    const tabId = platformType + '-tab';
+                    document.getElementById(tabId).classList.add('active');
                 }
             });
-
-            // Update active content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
-                content.classList.remove('active');
-            });
-            
-            const activeContent = document.getElementById(`${tabName}-tab`);
-            activeContent.classList.remove('hidden');
-            activeContent.classList.add('active');
-
-            currentTab = tabName;
-            updateTabIndicator();
-        }
-
-        function updateTabIndicator() {
-            const activeBtn = document.querySelector('.tab-btn.active');
-            const indicator = document.querySelector('.tab-indicator');
-            if (activeBtn && indicator) {
-                const rect = activeBtn.getBoundingClientRect();
-                const container = activeBtn.parentElement.getBoundingClientRect();
-                indicator.style.width = `${activeBtn.offsetWidth}px`;
-                indicator.style.left = `${activeBtn.offsetLeft}px`;
-            }
-        }
-
-        // Event listeners
-        function initializeEventListeners() {
-            // Theme toggle
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-
-            // Platform-specific event listeners
-            initializePlatformListeners('youtube');
-            initializePlatformListeners('tiktok');
-            initializePlatformListeners('instagram');
-            initializePlatformListeners('facebook');
-            initializePlatformListeners('twitter');
-
-            // Window resize handler for tab indicator
-            window.addEventListener('resize', updateTabIndicator);
-        }
-
-        function initializePlatformListeners(platform) {
-            const analyzeBtn = document.getElementById(`${platform}-analyze`);
-            const pasteBtn = document.getElementById(`${platform}-paste`);
-            const urlInput = document.getElementById(`${platform}-url`);
-
-            if (analyzeBtn) {
-                analyzeBtn.addEventListener('click', () => analyzeMedia(platform));
-            }
-
-            if (pasteBtn) {
-                pasteBtn.addEventListener('click', () => pasteFromClipboard(platform));
-            }
-
-            if (urlInput) {
-                urlInput.addEventListener('input', () => clearError(platform));
-                urlInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        analyzeMedia(platform);
-                    }
-                });
-            }
-        }
-
-        // Clipboard functionality
-        async function pasteFromClipboard(platform) {
-            try {
-                const text = await navigator.clipboard.readText();
-                const urlInput = document.getElementById(`${platform}-url`);
-                urlInput.value = text;
-                clearError(platform);
-                showToast('URL pasted successfully!', 'success');
-            } catch (err) {
-                showToast('Unable to access clipboard', 'error');
-            }
-        }
-
-        // URL validation
-        function validateURL(url, platform) {
-            const patterns = {
-                youtube: /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/,
-                tiktok: /^(https?:\/\/)?(www\.)?tiktok\.com\/.+/,
-                instagram: /^(https?:\/\/)?(www\.)?instagram\.com\/.+/,
-                facebook: /^(https?:\/\/)?(www\.)?(facebook\.com|fb\.watch)\/.+/,
-                twitter: /^(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\/.+/
-            };
-
-            return patterns[platform]?.test(url) || false;
-        }
-
-        function showError(platform, message) {
-            const errorElement = document.getElementById(`${platform}-error`);
-            const urlInput = document.getElementById(`${platform}-url`);
-            
-            errorElement.textContent = message;
-            errorElement.classList.remove('hidden');
-            urlInput.classList.add('error-input');
-        }
-
-        function clearError(platform) {
-            const errorElement = document.getElementById(`${platform}-error`);
-            const urlInput = document.getElementById(`${platform}-url`);
-            
-            errorElement.classList.add('hidden');
-            urlInput.classList.remove('error-input');
-        }
-
-        // Main analysis function
-        async function analyzeMedia(platform) {
-            const urlInput = document.getElementById(`${platform}-url`);
-            const url = urlInput.value.trim();
-
-            // Input validation
-            if (!url) {
-                showError(platform, 'Please enter a URL');
-                return;
-            }
-
-            if (!validateURL(url, platform)) {
-                showError(platform, `Please enter a valid ${platform} URL`);
-                return;
-            }
-
-            clearError(platform);
-            showLoading(platform, true);
-
-            try {
-                // Simulate API call with realistic timing
-                await simulateAnalysis(platform, url);
+        });
+        
+        // Download Buttons
+        const downloadButtons = {
+            youtube: document.getElementById('downloadYoutube'),
+            tiktok: document.getElementById('downloadTiktok'),
+            instagram: document.getElementById('downloadInstagram'),
+            facebook: document.getElementById('downloadFacebook'),
+            twitter: document.getElementById('downloadTwitter')
+        };
+        
+        Object.keys(downloadButtons).forEach(platform => {
+            downloadButtons[platform].addEventListener('click', () => {
+                const url = urlInputs[platform].value.trim();
                 
-                // Generate mock data for demonstration
-                const mediaData = await generateMockData(platform, url);
+                if (!url) {
+                    showToast(`Please enter a valid ${platform.charAt(0).toUpperCase() + platform.slice(1)} URL`, 'error');
+                    return;
+                }
                 
-                showResults(platform, mediaData);
-                showToast('Analysis completed successfully!', 'success');
+                // Show loading state
+                document.getElementById('loader').style.display = 'block';
+                document.getElementById('resultsContainer').style.display = 'none';
                 
-            } catch (error) {
-                showError(platform, 'Failed to analyze media. Please try again.');
-                showToast('Analysis failed. Please check the URL and try again.', 'error');
-            } finally {
-                showLoading(platform, false);
-            }
-        }
-
-        // Loading state management
-        function showLoading(platform, show) {
-            const loadingElement = document.getElementById(`${platform}-loading`);
-            const analyzeBtn = document.getElementById(`${platform}-analyze`);
-            const progressBar = document.getElementById(`${platform}-progress`);
-
-            if (show) {
-                loadingElement.classList.remove('hidden');
-                analyzeBtn.disabled = true;
-                analyzeBtn.innerHTML = '<div class="spinner mr-2"></div>Analyzing...';
-                
-                // Animate progress bar
-                let progress = 0;
-                const interval = setInterval(() => {
-                    progress += Math.random() * 15;
-                    if (progress > 100) progress = 100;
-                    progressBar.style.width = `${progress}%`;
+                // Simulate API call delay
+                setTimeout(() => {
+                    // Hide loader and show results
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('resultsContainer').style.display = 'block';
                     
-                    if (progress >= 100) {
-                        clearInterval(interval);
-                    }
-                }, 200);
-            } else {
-                loadingElement.classList.add('hidden');
-                analyzeBtn.disabled = false;
-                analyzeBtn.innerHTML = '<i class="fas fa-search mr-2"></i>Analyze';
-                progressBar.style.width = '0%';
-            }
-        }
-
-        // Simulate realistic API analysis
-        async function simulateAnalysis(platform, url) {
-            // Simulate network delay
-            const delay = Math.random() * 2000 + 1000; // 1-3 seconds
-            await new Promise(resolve => setTimeout(resolve, delay));
+                    // Update video info based on platform
+                    updateVideoInfo(platform, url);
+                    
+                    // Generate format options
+                    generateFormatOptions(platform);
+                    
+                    showToast('Video analyzed successfully! Choose a format to download', 'success');
+                }, 2000);
+            });
+        });
+        
+        // Format options and download functionality
+        function generateFormatOptions(platform) {
+            const formatOptions = document.getElementById('formatOptions');
+            formatOptions.innerHTML = '';
             
-            // Simulate potential network errors (5% chance)
-            if (Math.random() < 0.05) {
-                throw new Error('Network error');
-            }
+            // Different formats for different platforms
+            const formats = {
+                youtube: [
+                    { type: 'MP4', quality: '4K Ultra HD', size: '850 MB' },
+                    { type: 'MP4', quality: '1080p Full HD', size: '420 MB' },
+                    { type: 'MP4', quality: '720p HD', size: '280 MB' },
+                    { type: 'MP3', quality: '320kbps Audio', size: '12 MB' },
+                    { type: 'MP3', quality: '128kbps Audio', size: '5 MB' }
+                ],
+                tiktok: [
+                    { type: 'MP4', quality: 'HD', size: '15 MB' },
+                    { type: 'MP4', quality: 'SD', size: '8 MB' },
+                    { type: 'MP3', quality: 'Audio', size: '1.2 MB' }
+                ],
+                instagram: [
+                    { type: 'MP4', quality: 'HD', size: '25 MB' },
+                    { type: 'MP4', quality: 'SD', size: '12 MB' },
+                    { type: 'JPG', quality: 'Image', size: '3.5 MB' }
+                ],
+                facebook: [
+                    { type: 'MP4', quality: '1080p HD', size: '120 MB' },
+                    { type: 'MP4', quality: '720p HD', size: '75 MB' },
+                    { type: 'MP4', quality: '480p SD', size: '45 MB' }
+                ],
+                twitter: [
+                    { type: 'MP4', quality: 'HD', size: '18 MB' },
+                    { type: 'MP4', quality: 'SD', size: '9 MB' },
+                    { type: 'GIF', quality: 'Animated', size: '5 MB' }
+                ]
+            };
+            
+            // Get formats for current platform
+            const platformFormats = formats[platform] || formats.youtube;
+            
+            // Generate HTML for each format option
+            platformFormats.forEach(format => {
+                const formatElement = document.createElement('div');
+                formatElement.className = 'format-option';
+                formatElement.innerHTML = `
+                    <div class="format-details">
+                        <div class="format-type">${format.type} • ${format.quality}</div>
+                        <div class="format-quality">${format.size}</div>
+                    </div>
+                    <button class="download-btn" data-type="${format.type.toLowerCase()}">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                `;
+                
+                // Add event listener to download button
+                const downloadBtn = formatElement.querySelector('.download-btn');
+                downloadBtn.addEventListener('click', () => {
+                    downloadFile(platform, format);
+                });
+                
+                formatOptions.appendChild(formatElement);
+            });
         }
-
-        // Generate mock data for demonstration
-        async function generateMockData(platform, url) {
-            const mockData = {
+        
+        // Update video information based on platform
+        function updateVideoInfo(platform, url) {
+            const videoInfo = {
                 youtube: {
-                    title: "Sample YouTube Video - Tutorial Guide",
-                    thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-                    duration: "04:35",
-                    views: "1,234,567 views",
-                    channel: "MALIK SAHAB Official",
-                    formats: [
-                        { quality: "2160p", format: "MP4", size: "890 MB", type: "video", badge: "4k" },
-                        { quality: "1080p", format: "MP4", size: "445 MB", type: "video", badge: "hd" },
-                        { quality: "720p", format: "MP4", size: "234 MB", type: "video", badge: "hd" },
-                        { quality: "480p", format: "MP4", size: "123 MB", type: "video", badge: "sd" },
-                        { quality: "320kbps", format: "MP3", size: "4.2 MB", type: "audio", badge: "audio" },
-                        { quality: "128kbps", format: "MP3", size: "1.8 MB", type: "audio", badge: "audio" }
-                    ]
+                    title: 'How to Build a Media Downloader Website',
+                    thumbnail: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+                    duration: '12:45',
+                    views: '1.2M views',
+                    author: 'Coding Master'
                 },
                 tiktok: {
-                    title: "Amazing TikTok Video",
-                    thumbnail: "https://via.placeholder.com/120x90/FF0050/FFFFFF?text=TikTok",
-                    author: "@username",
-                    likes: "12.5K likes",
-                    duration: "0:15",
-                    formats: [
-                        { quality: "720p", format: "MP4", size: "5.2 MB", type: "video", badge: "hd" },
-                        { quality: "480p", format: "MP4", size: "3.1 MB", type: "video", badge: "sd" },
-                        { quality: "Audio", format: "MP3", size: "240 KB", type: "audio", badge: "audio" }
-                    ]
+                    title: 'Funny TikTok Compilation #243',
+                    thumbnail: 'https://example.com/tiktok-thumbnail.jpg',
+                    duration: '0:45',
+                    views: '5.7M views',
+                    author: '@tiktokuser'
                 },
                 instagram: {
-                    title: "Instagram Post",
-                    thumbnail: "https://via.placeholder.com/120x90/E4405F/FFFFFF?text=IG",
-                    author: "@username",
-                    type: "Photo",
-                    date: "2 hours ago",
-                    formats: [
-                        { quality: "Original", format: "JPG", size: "1.8 MB", type: "image", badge: "hd" },
-                        { quality: "720p", format: "MP4", size: "8.5 MB", type: "video", badge: "hd" },
-                        { quality: "480p", format: "MP4", size: "4.2 MB", type: "video", badge: "sd" }
-                    ]
+                    title: 'Beautiful Sunset at the Beach',
+                    thumbnail: 'https://example.com/instagram-thumbnail.jpg',
+                    duration: '0:25',
+                    views: '245K views',
+                    author: '@instagrammer'
                 },
                 facebook: {
-                    title: "Facebook Video Post",
-                    thumbnail: "https://via.placeholder.com/120x90/1877F2/FFFFFF?text=FB",
-                    author: "Page Name",
-                    views: "50K views",
-                    duration: "2:30",
-                    formats: [
-                        { quality: "1080p", format: "MP4", size: "125 MB", type: "video", badge: "hd" },
-                        { quality: "720p", format: "MP4", size: "78 MB", type: "video", badge: "hd" },
-                        { quality: "480p", format: "MP4", size: "45 MB", type: "video", badge: "sd" }
-                    ]
+                    title: 'Amazing Wildlife Documentary',
+                    thumbnail: 'https://example.com/facebook-thumbnail.jpg',
+                    duration: '8:32',
+                    views: '3.4M views',
+                    author: 'Nature Channel'
                 },
                 twitter: {
-                    title: "Twitter Video Tweet",
-                    thumbnail: "https://via.placeholder.com/120x90/1DA1F2/FFFFFF?text=Twitter",
-                    author: "@username",
-                    date: "1 hour ago",
-                    likes: "2.5K likes",
-                    formats: [
-                        { quality: "720p", format: "MP4", size: "15.2 MB", type: "video", badge: "hd" },
-                        { quality: "480p", format: "MP4", size: "8.7 MB", type: "video", badge: "sd" }
-                    ]
+                    title: 'Breaking News: Major Announcement',
+                    thumbnail: 'https://example.com/twitter-thumbnail.jpg',
+                    duration: '1:15',
+                    views: '780K views',
+                    author: '@newsagency'
                 }
             };
-
-            return mockData[platform] || mockData.youtube;
+            
+            const info = videoInfo[platform] || videoInfo.youtube;
+            
+            document.getElementById('videoPreview').src = info.thumbnail;
+            document.getElementById('videoTitle').textContent = info.title;
+            document.getElementById('videoDuration').textContent = info.duration;
+            document.getElementById('videoViews').textContent = info.views;
+            document.getElementById('videoAuthor').textContent = info.author;
         }
-
-        // Display results
-        function showResults(platform, data) {
-            const resultsElement = document.getElementById(`${platform}-results`);
+        
+        // Download file function
+        function downloadFile(platform, format) {
+            showToast(`Starting download: ${format.quality} ${format.type}`, 'warning');
             
-            // Update media info
-            document.getElementById(`${platform}-title`).textContent = data.title;
-            document.getElementById(`${platform}-thumbnail`).src = data.thumbnail;
-            
-            // Update platform-specific info
-            updatePlatformSpecificInfo(platform, data);
-            
-            // Generate format options
-            generateFormatOptions(platform, data.formats);
-            
-            // Show results
-            resultsElement.classList.remove('hidden');
-            resultsElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            // Simulate download progress
+            setTimeout(() => {
+                showToast(`Download completed successfully!`, 'success');
+                
+                // In a real implementation, this would be the actual download
+                const link = document.createElement('a');
+                link.href = '#';
+                link.download = `downloaded_video.${format.type.toLowerCase()}`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }, 2000);
         }
-
-        function updatePlatformSpecificInfo(platform, data) {
-            const elements = {
-                youtube: ['duration', 'views', 'channel'],
-                tiktok: ['author', 'likes', 'duration'],
-                instagram: ['author', 'type', 'date'],
-                facebook: ['author', 'views', 'duration'],
-                twitter: ['author', 'date', 'likes']
-            };
-
-            elements[platform]?.forEach(prop => {
-                const element = document.getElementById(`${platform}-${prop}`);
-                if (element && data[prop]) {
-                    element.textContent = data[prop];
-                }
-            });
-        }
-
-        function generateFormatOptions(platform, formats) {
-            const container = document.getElementById(`${platform}-formats`);
-            container.innerHTML = '';
-
-            formats.forEach(format => {
-                const formatElement = createFormatElement(format, platform);
-                container.appendChild(formatElement);
-            });
-        }
-
-        function createFormatElement(format, platform) {
-            const div = document.createElement('div');
-            div.className = 'download-item p-4 bg-gray-50 dark:bg-gray-800 rounded-lg';
-            
-            div.innerHTML = `
-                <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center space-x-3">
-                        <i class="fas fa-${format.type === 'video' ? 'video' : format.type === 'audio' ? 'music' : 'image'} text-lg text-blue-500"></i>
-                        <div>
-                            <div class="font-medium">${format.quality}</div>
-                            <div class="text-sm text-gray-500">${format.format} • ${format.size}</div>
-                        </div>
-                    </div>
-                    <span class="quality-badge quality-${format.badge}">${format.badge.toUpperCase()}</span>
-                </div>
-                <button onclick="downloadFile('${platform}', '${format.quality}', '${format.format}')" 
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 hover-scale">
-                    <i class="fas fa-download mr-2"></i>
-                    Download ${format.format}
-                </button>
-            `;
-
-            return div;
-        }
-
-        // Download functionality
-        async function downloadFile(platform, quality, format) {
-            showToast(`Preparing ${format} download...`, 'info');
-            
-            // Simulate download preparation
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // In a real implementation, this would trigger the actual download
-            showToast(`${format} download started successfully!`, 'success');
-            
-            // For demonstration, we'll simulate a download link
-            const link = document.createElement('a');
-            link.href = '#';
-            link.download = `media_${Date.now()}.${format.toLowerCase()}`;
-            link.textContent = 'Download';
-            
-            // Trigger download simulation
-            console.log(`Downloading: ${platform} - ${quality} - ${format}`);
-        }
-
-        // Toast notification system
-        function showToast(message, type = 'success') {
+        
+        // Toast notification function
+        function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
-            const icon = document.getElementById('toast-icon');
-            const messageEl = document.getElementById('toast-message');
-
-            // Set icon and styling based on type
-            const configs = {
-                success: { icon: 'fas fa-check-circle text-green-500', bg: 'bg-green-50 border-green-200' },
-                error: { icon: 'fas fa-exclamation-circle text-red-500', bg: 'bg-red-50 border-red-200' },
-                info: { icon: 'fas fa-info-circle text-blue-500', bg: 'bg-blue-50 border-blue-200' },
-                warning: { icon: 'fas fa-exclamation-triangle text-yellow-500', bg: 'bg-yellow-50 border-yellow-200' }
-            };
-
-            const config = configs[type] || configs.success;
-            icon.className = config.icon;
-            messageEl.textContent = message;
-
-            // Show toast
-            toast.classList.add('show');
-
-            // Auto hide after 3 seconds
-            setTimeout(() => hideToast(), 3000);
-        }
-
-        function hideToast() {
-            document.getElementById('toast').classList.remove('show');
-        }
-
-        // Utility functions
-        function sanitizeInput(input) {
-            const div = document.createElement('div');
-            div.textContent = input;
-            return div.innerHTML;
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        function formatDuration(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            // Ctrl/Cmd + V for paste
-            if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
-                const activeInput = document.querySelector(`#${currentTab}-url`);
-                if (activeInput && document.activeElement !== activeInput) {
-                    pasteFromClipboard(currentTab);
-                    e.preventDefault();
-                }
-            }
+            const toastMessage = document.getElementById('toastMessage');
             
-            // Enter key for analyze
-            if (e.key === 'Enter' && document.activeElement.id.includes('-url')) {
-                const platform = document.activeElement.id.split('-')[0];
-                analyzeMedia(platform);
-            }
-        });
-
-        // Performance monitoring
-        if ('performance' in window) {
-            window.addEventListener('load', function() {
-                const perfData = performance.timing;
-                const loadTime = perfData.loadEventEnd - perfData.navigationStart;
-                console.log(`Page loaded in ${loadTime}ms`);
-            });
+            // Update toast content and style
+            toastMessage.textContent = message;
+            toast.className = `toast ${type}`;
+            
+            // Show the toast
+            toast.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
-
-        // Service Worker registration for offline functionality
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
-                        console.log('SW registered with scope: ', registration.scope);
-                    })
-                    .catch(function(error) {
-                        console.log('SW registration failed: ', error);
-                    });
-            });
-        }
+        
+        // Simulate platform selection on page load
+        setTimeout(() => {
+            platforms[0].classList.add('active');
+        }, 500);
     </script>
 </body>
-</html>
+    </html>
