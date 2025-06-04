@@ -3,864 +3,1136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MALIK SAHAB - Advanced Media Downloader</title>
+    <title>MALIK SAHAB - Professional Media Downloader</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #10b981;
-            --dark-bg: #111827;
-            --card-bg: #1f2937;
-            --text-primary: #f3f4f6;
-            --text-secondary: #9ca3af;
-            --accent-glow: rgba(79, 70, 229, 0.6);
+            --primary-color: #3b82f6;
+            --secondary-color: #1e40af;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --dark-bg: #1f2937;
+            --dark-surface: #374151;
+            --light-bg: #f9fafb;
+            --light-surface: #ffffff;
         }
-        
+
+        .dark {
+            --bg-primary: var(--dark-bg);
+            --bg-secondary: var(--dark-surface);
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --border-color: #4b5563;
+        }
+
+        .light {
+            --bg-primary: var(--light-bg);
+            --bg-secondary: var(--light-surface);
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--dark-bg);
+            background-color: var(--bg-primary);
             color: var(--text-primary);
+            transition: all 0.3s ease;
         }
-        
-        .brand-text {
-            background: linear-gradient(90deg, #4f46e5, #10b981);
+
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            height: 4px;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+
+        .spinner {
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid var(--primary-color);
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: transparent;
         }
-        
-        .nav-tab {
-            position: relative;
+
+        .hover-scale {
+            transition: transform 0.2s ease;
+        }
+
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+
+        .platform-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+        }
+
+        .download-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             transition: all 0.3s ease;
         }
-        
-        .nav-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, #4f46e5, #10b981);
-            border-radius: 2px;
+
+        .download-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
         }
-        
-        .glow-button {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            min-width: 300px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
         }
-        
-        .glow-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            opacity: 0;
-            transition: opacity 0.3s ease;
+
+        .toast.show {
+            transform: translateX(0);
         }
-        
-        .glow-button:hover::before {
-            opacity: 0.2;
-        }
-        
-        .glow-button::after {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            width: calc(100% + 4px);
-            height: calc(100% + 4px);
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .glow-button:hover::after {
-            opacity: 1;
-        }
-        
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .input-glow:focus {
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-        
-        .premium-badge {
-            background: linear-gradient(90deg, #f59e0b, #ef4444);
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
+
+        .quality-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 12px;
             font-size: 0.75rem;
             font-weight: 600;
         }
-        
-        .floating-animation {
-            animation: floating 6s ease-in-out infinite;
-        }
-        
-        @keyframes floating {
-            0% {
-                transform: translate(0, 0px);
-            }
-            50% {
-                transform: translate(0, 15px);
-            }
-            100% {
-                transform: translate(0, -0px);
-            }
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .format-option {
-            position: relative;
-        }
-        
-        .format-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .format-option label {
-            display: block;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            background-color: rgba(31, 41, 55, 0.8);
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .format-option input[type="radio"]:checked + label {
-            background: linear-gradient(90deg, rgba(79, 70, 229, 0.2), rgba(16, 185, 129, 0.2));
+
+        .quality-4k { background-color: #dc2626; color: white; }
+        .quality-hd { background-color: #ea580c; color: white; }
+        .quality-sd { background-color: #65a30d; color: white; }
+        .quality-audio { background-color: #7c3aed; color: white; }
+
+        input:focus, textarea:focus {
+            outline: none;
             border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-        
-        .format-option:hover label {
-            background-color: rgba(55, 65, 81, 0.8);
+
+        .error-input {
+            border-color: var(--danger-color) !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
         }
-        
-        .loading-indicator {
-            display: none;
+
+        .tab-content {
+            min-height: 400px;
         }
-        
-        .loading .loading-indicator {
-            display: flex;
+
+        .media-thumbnail {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 6px;
         }
-        
-        .loading .btn-text {
-            display: none;
-        }
-        
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <header class="flex flex-col md:flex-row justify-between items-center mb-10">
-            <div class="flex items-center mb-6 md:mb-0">
-                <h1 class="text-4xl font-bold brand-text">MALIK SAHAB</h1>
-                <span class="ml-3 premium-badge">PREMIUM</span>
+<body class="light">
+    <!-- Theme Toggle -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="themeToggle" class="p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+        </button>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="card p-4 shadow-lg rounded-lg">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i id="toast-icon" class="fas fa-check-circle text-green-500"></i>
+                    <span id="toast-message">Success message</span>
+                </div>
+                <button onclick="hideToast()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="flex space-x-4">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fab fa-whatsapp text-lg"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fab fa-telegram text-lg"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fab fa-youtube text-lg"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fas fa-crown text-yellow-400 text-lg"></i>
-                </a>
+        </div>
+    </div>
+
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="py-8 px-4">
+            <div class="max-w-6xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold gradient-text mb-2">
+                    <i class="fas fa-crown text-yellow-500 mr-2"></i>
+                    MALIK SAHAB
+                </h1>
+                <p class="text-xl text-gray-600 dark:text-gray-400">Professional Media Downloader Toolkit</p>
+                <div class="flex justify-center items-center space-x-4 mt-4">
+                    <span class="flex items-center space-x-1 text-sm text-gray-500">
+                        <i class="fas fa-shield-alt text-green-500"></i>
+                        <span>Secure</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-sm text-gray-500">
+                        <i class="fas fa-bolt text-yellow-500"></i>
+                        <span>Fast</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-sm text-gray-500">
+                        <i class="fas fa-star text-blue-500"></i>
+                        <span>Professional</span>
+                    </span>
+                </div>
             </div>
         </header>
 
         <!-- Main Content -->
-        <div>
-            <h2 class="text-2xl font-semibold mb-6">Advanced Media Downloader Toolkit</h2>
-            
-            <!-- Navigation Tabs -->
-            <div class="relative border-b border-gray-700 mb-8">
-                <nav class="flex space-x-8 overflow-x-auto pb-2 scrollbar-none">
-                    <button class="nav-tab active text-white pb-2 focus:outline-none" data-tab="youtube">
-                        <i class="fab fa-youtube mr-2 text-red-500"></i> YouTube Downloader
+        <main class="max-w-6xl mx-auto px-4">
+            <!-- Tabs -->
+            <div class="relative mb-8">
+                <div class="flex space-x-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg overflow-x-auto">
+                    <button class="tab-btn active flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="youtube">
+                        <i class="fab fa-youtube text-red-500"></i>
+                        <span>YouTube</span>
                     </button>
-                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="website">
-                        <i class="fas fa-globe mr-2 text-blue-400"></i> Website Downloader
+                    <button class="tab-btn flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="tiktok">
+                        <i class="fab fa-tiktok"></i>
+                        <span>TikTok</span>
                     </button>
-                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="tiktok">
-                        <i class="fab fa-tiktok mr-2 text-pink-500"></i> TikTok Downloader
+                    <button class="tab-btn flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="instagram">
+                        <i class="fab fa-instagram text-pink-500"></i>
+                        <span>Instagram</span>
                     </button>
-                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="instagram">
-                        <i class="fab fa-instagram mr-2 text-purple-500"></i> Instagram Downloader
+                    <button class="tab-btn flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="facebook">
+                        <i class="fab fa-facebook text-blue-600"></i>
+                        <span>Facebook</span>
                     </button>
-                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="facebook">
-                        <i class="fab fa-facebook mr-2 text-blue-500"></i> Facebook Downloader
+                    <button class="tab-btn flex items-center space-x-2 px-4 py-3 rounded-md text-sm font-medium transition-all duration-300 whitespace-nowrap" data-tab="twitter">
+                        <i class="fab fa-twitter text-blue-400"></i>
+                        <span>Twitter</span>
                     </button>
-                    <button class="nav-tab text-gray-400 pb-2 focus:outline-none" data-tab="tools">
-                        <i class="fas fa-tools mr-2 text-yellow-500"></i> Tools
-                    </button>
-                </nav>
+                </div>
+                <div class="tab-indicator"></div>
             </div>
 
-            <!-- Tab Content -->
-            <div class="tab-contents">
-                <!-- YouTube Downloader Tab -->
+            <!-- Tab Contents -->
+            <div class="space-y-8">
+                <!-- YouTube Tab -->
                 <div id="youtube-tab" class="tab-content active">
-                    <div class="mb-6">
-                        <label for="youtube-url" class="block text-sm font-medium text-gray-300 mb-2">YouTube URL</label>
-                        <div class="flex">
-                            <input type="text" id="youtube-url" placeholder="https://youtu.be/..." class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
-                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
-                                <div class="relative z-10 flex items-center">
-                                    <span class="btn-text">Analyze</span>
-                                    <div class="loading-indicator ml-2">
-                                        <div class="spinner"></div>
-                                    </div>
-                                </div>
-                            </button>
+                    <div class="card rounded-xl p-6 shadow-lg">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <i class="fab fa-youtube text-2xl text-red-500"></i>
+                            <h2 class="text-2xl font-bold">YouTube Downloader</h2>
                         </div>
-                        <div class="text-xs text-gray-400 mt-1">
-                            <i class="fas fa-info-circle mr-1"></i> Supports videos, playlists, shorts, and live streams
-                        </div>
-                    </div>
-
-                    <!-- Video Preview (Example) -->
-                    <div class="card p-6 mb-8">
-                        <div class="flex flex-col md:flex-row items-start gap-6">
-                            <div class="w-full md:w-72 h-40 bg-gray-800 rounded-lg overflow-hidden">
-                                <!-- Thumbnail Placeholder -->
-                                <div class="w-full h-full bg-gray-700 flex items-center justify-center">
-                                    <i class="fas fa-play-circle text-gray-500 text-4xl"></i>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <h3 class="text-lg font-medium mb-2">Video Title Will Appear Here</h3>
-                                <div class="text-sm text-gray-400 mb-2">by Channel Name</div>
-                                <div class="flex items-center gap-4 text-xs text-gray-400 mb-3">
-                                    <div><i class="far fa-clock mr-1"></i> 00:00</div>
-                                    <div><i class="far fa-eye mr-1"></i> 0 views</div>
-                                    <div><i class="far fa-thumbs-up mr-1"></i> 0</div>
-                                    <div><i class="far fa-calendar mr-1"></i> Date</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Download Options -->
-                    <div class="card p-6 mb-6">
-                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
                         
-                        <div class="mb-6">
-                            <div class="flex space-x-4 mb-4">
-                                <div class="format-option">
-                                    <input type="radio" id="mp4-video" name="format" value="mp4" checked>
-                                    <label for="mp4-video" class="flex items-center">
-                                        <i class="fas fa-video mr-2 text-blue-400"></i> MP4 (Video)
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="mp3-audio" name="format" value="mp3">
-                                    <label for="mp3-audio" class="flex items-center">
-                                        <i class="fas fa-music mr-2 text-green-400"></i> MP3 (Audio)
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="both-formats" name="format" value="both">
-                                    <label for="both-formats" class="flex items-center">
-                                        <i class="fas fa-photo-video mr-2 text-purple-400"></i> Both Formats
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Resolution Options -->
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                                <div class="format-option">
-                                    <input type="radio" id="res-854x480" name="resolution" value="854x480">
-                                    <label for="res-854x480" class="text-center">
-                                        <div class="font-medium">854x480</div>
-                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="res-640x360" name="resolution" value="640x360">
-                                    <label for="res-640x360" class="text-center">
-                                        <div class="font-medium">640x360</div>
-                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="res-640x360hd" name="resolution" value="640x360hd" checked>
-                                    <label for="res-640x360hd" class="text-center">
-                                        <div class="font-medium">640x360</div>
-                                        <div class="text-xs text-gray-400">(4.52 MB)</div>
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="res-256x144" name="resolution" value="256x144">
-                                    <label for="res-256x144" class="text-center">
-                                        <div class="font-medium">256x144</div>
-                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="res-160x90" name="resolution" value="160x90">
-                                    <label for="res-160x90" class="text-center">
-                                        <div class="font-medium">160x90</div>
-                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="res-80x45" name="resolution" value="80x45">
-                                    <label for="res-80x45" class="text-center">
-                                        <div class="font-medium">80x45</div>
-                                        <div class="text-xs text-gray-400">(0 Bytes)</div>
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="audio-only" name="resolution" value="audio-only">
-                                    <label for="audio-only" class="text-center">
-                                        <div class="font-medium">Audio Only</div>
-                                        <div class="text-xs text-gray-400">(4.62 MB)</div>
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="audio-only-hq" name="resolution" value="audio-only-hq">
-                                    <label for="audio-only-hq" class="text-center">
-                                        <div class="font-medium">Audio Only</div>
-                                        <div class="text-xs text-gray-400">(4.89 MB)</div>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Advanced Options -->
-                        <div>
-                            <h4 class="text-sm font-medium mb-3">Advanced Options</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="include-metadata" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
-                                    <label for="include-metadata" class="ml-2 text-sm text-gray-300">Include Metadata</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="include-thumbnail" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
-                                    <label for="include-thumbnail" class="ml-2 text-sm text-gray-300">Include Thumbnail</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="include-subtitles" class="w-4 h-4 bg-gray-700 border-gray-600 rounded">
-                                    <label for="include-subtitles" class="ml-2 text-sm text-gray-300">Include Subtitles</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="embed-metadata" class="w-4 h-4 bg-gray-700 border-gray-600 rounded">
-                                    <label for="embed-metadata" class="ml-2 text-sm text-gray-300">Embed Metadata</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Download Button -->
-                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
-                        <div class="relative z-10 flex items-center">
-                            <i class="fas fa-download mr-2"></i>
-                            <span class="btn-text">Download Video</span>
-                            <div class="loading-indicator ml-2">
-                                <div class="spinner"></div>
-                            </div>
-                        </div>
-                    </button>
-                </div>
-
-                <!-- Website Downloader Tab -->
-                <div id="website-tab" class="tab-content">
-                    <div class="mb-6">
-                        <label for="website-url" class="block text-sm font-medium text-gray-300 mb-2">Website URL</label>
-                        <div class="flex">
-                            <input type="text" id="website-url" placeholder="https://example.com" class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
-                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
-                                <div class="relative z-10 flex items-center">
-                                    <span class="btn-text">Analyze</span>
-                                    <div class="loading-indicator ml-2">
-                                        <div class="spinner"></div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">YouTube URL</label>
+                                <div class="relative">
+                                    <input type="url" id="youtube-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://www.youtube.com/watch?v=...">
+                                    <div class="absolute right-3 top-3">
+                                        <i class="fas fa-link text-gray-400"></i>
                                     </div>
                                 </div>
-                            </button>
+                                <p id="youtube-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid YouTube URL</p>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button id="youtube-analyze" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-search mr-2"></i>
+                                    Analyze Video
+                                </button>
+                                <button id="youtube-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-paste mr-2"></i>
+                                    Paste
+                                </button>
+                            </div>
                         </div>
-                        <div class="text-xs text-gray-400 mt-1">
-                            <i class="fas fa-info-circle mr-1"></i> Enter any website URL to download its content
-                        </div>
-                    </div>
 
-                    <div class="card p-6 mb-6">
-                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="download-images" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
-                                <label for="download-images" class="ml-2 text-sm text-gray-300">Download Images</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="download-videos" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
-                                <label for="download-videos" class="ml-2 text-sm text-gray-300">Download Videos</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="download-audio" class="w-4 h-4 bg-gray-700 border-gray-600 rounded">
-                                <label for="download-audio" class="ml-2 text-sm text-gray-300">Download Audio Files</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="download-documents" class="w-4 h-4 bg-gray-700 border-gray-600 rounded">
-                                <label for="download-documents" class="ml-2 text-sm text-gray-300">Download Documents</label>
-                            </div>
-                        </div>
-                        <div class="mt-6">
-                            <label for="download-depth" class="block text-sm font-medium text-gray-300 mb-2">Crawl Depth</label>
-                            <select id="download-depth" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none input-glow">
-                                <option value="1">Current page only</option>
-                                <option value="2">Current page + linked pages (1 level)</option>
-                                <option value="3">Deep crawl (2 levels)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
-                        <div class="relative z-10 flex items-center">
-                            <i class="fas fa-download mr-2"></i>
-                            <span class="btn-text">Download Website</span>
-                            <div class="loading-indicator ml-2">
+                        <!-- Loading State -->
+                        <div id="youtube-loading" class="hidden mt-6">
+                            <div class="flex items-center justify-center space-x-3 py-8">
                                 <div class="spinner"></div>
+                                <span>Analyzing video...</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div id="youtube-progress" class="progress-bar w-0"></div>
                             </div>
                         </div>
-                    </button>
-                </div>
 
-                <!-- TikTok Downloader Tab -->
-                <div id="tiktok-tab" class="tab-content">
-                    <div class="mb-6">
-                        <label for="tiktok-url" class="block text-sm font-medium text-gray-300 mb-2">TikTok URL</label>
-                        <div class="flex">
-                            <input type="text" id="tiktok-url" placeholder="https://www.tiktok.com/..." class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
-                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
-                                <div class="relative z-10 flex items-center">
-                                    <span class="btn-text">Analyze</span>
-                                    <div class="loading-indicator ml-2">
-                                        <div class="spinner"></div>
+                        <!-- Results -->
+                        <div id="youtube-results" class="hidden mt-6 fade-in">
+                            <div class="border-t pt-6">
+                                <div class="flex items-start space-x-4 mb-6">
+                                    <img id="youtube-thumbnail" class="media-thumbnail" src="" alt="Video thumbnail">
+                                    <div class="flex-1">
+                                        <h3 id="youtube-title" class="text-lg font-semibold mb-2"></h3>
+                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                                            <span id="youtube-duration"></span>
+                                            <span id="youtube-views"></span>
+                                            <span id="youtube-channel"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </button>
-                        </div>
-                        <div class="text-xs text-gray-400 mt-1">
-                            <i class="fas fa-info-circle mr-1"></i> Supports TikTok videos, including watermark removal
-                        </div>
-                    </div>
-
-                    <div class="card p-6 mb-6">
-                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
-                        <div class="mb-6">
-                            <div class="flex flex-wrap gap-4">
-                                <div class="format-option">
-                                    <input type="radio" id="tiktok-with-watermark" name="tiktok-watermark" value="with">
-                                    <label for="tiktok-with-watermark" class="flex items-center">
-                                        <i class="fas fa-stamp mr-2 text-red-400"></i> With Watermark
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="tiktok-without-watermark" name="tiktok-watermark" value="without" checked>
-                                    <label for="tiktok-without-watermark" class="flex items-center">
-                                        <i class="fas fa-ban mr-2 text-green-400"></i> Without Watermark
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="tiktok-audio-only" name="tiktok-watermark" value="audio">
-                                    <label for="tiktok-audio-only" class="flex items-center">
-                                        <i class="fas fa-music mr-2 text-blue-400"></i> Audio Only
-                                    </label>
+                                
+                                <div class="format-grid" id="youtube-formats">
+                                    <!-- Dynamic format options will be inserted here -->
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
-                        <div class="relative z-10 flex items-center">
-                            <i class="fas fa-download mr-2"></i>
-                            <span class="btn-text">Download TikTok</span>
-                            <div class="loading-indicator ml-2">
-                                <div class="spinner"></div>
-                            </div>
-                        </div>
-                    </button>
                 </div>
 
-                <!-- Instagram Downloader Tab -->
-                <div id="instagram-tab" class="tab-content">
-                    <div class="mb-6">
-                        <label for="instagram-url" class="block text-sm font-medium text-gray-300 mb-2">Instagram URL</label>
-                        <div class="flex">
-                            <input type="text" id="instagram-url" placeholder="https://www.instagram.com/..." class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
-                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
-                                <div class="relative z-10 flex items-center">
-                                    <span class="btn-text">Analyze</span>
-                                    <div class="loading-indicator ml-2">
-                                        <div class="spinner"></div>
+                <!-- TikTok Tab -->
+                <div id="tiktok-tab" class="tab-content hidden">
+                    <div class="card rounded-xl p-6 shadow-lg">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <i class="fab fa-tiktok text-2xl"></i>
+                            <h2 class="text-2xl font-bold">TikTok Downloader</h2>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">TikTok URL</label>
+                                <div class="relative">
+                                    <input type="url" id="tiktok-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://www.tiktok.com/@username/video/...">
+                                    <div class="absolute right-3 top-3">
+                                        <i class="fas fa-link text-gray-400"></i>
                                     </div>
                                 </div>
-                            </button>
-                        </div>
-                        <div class="text-xs text-gray-400 mt-1">
-                            <i class="fas fa-info-circle mr-1"></i> Supports posts, reels, stories, and IGTV videos
-                        </div>
-                    </div>
-
-                    <div class="card p-6 mb-6">
-                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
-                        <div class="mb-6">
-                            <div class="flex flex-wrap gap-4">
-                                <div class="format-option">
-                                    <input type="radio" id="insta-high-quality" name="insta-quality" value="high" checked>
-                                    <label for="insta-high-quality" class="flex items-center">
-                                        <i class="fas fa-star mr-2 text-yellow-400"></i> High Quality
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="insta-medium-quality" name="insta-quality" value="medium">
-                                    <label for="insta-medium-quality" class="flex items-center">
-                                        <i class="fas fa-star-half-alt mr-2 text-yellow-400"></i> Medium Quality
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="insta-low-quality" name="insta-quality" value="low">
-                                    <label for="insta-low-quality" class="flex items-center">
-                                        <i class="far fa-star mr-2 text-yellow-400"></i> Low Quality
-                                    </label>
-                                </div>
+                                <p id="tiktok-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid TikTok URL</p>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button id="tiktok-analyze" class="flex-1 bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-search mr-2"></i>
+                                    Analyze Video
+                                </button>
+                                <button id="tiktok-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-paste mr-2"></i>
+                                    Paste
+                                </button>
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="download-all-slides" class="w-4 h-4 bg-gray-700 border-gray-600 rounded" checked>
-                                <label for="download-all-slides" class="ml-2 text-sm text-gray-300">Download All Slides (for carousel posts)</label>
-                            </div>
-                        </div>
-                    </div>
 
-                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
-                        <div class="relative z-10 flex items-center">
-                            <i class="fas fa-download mr-2"></i>
-                            <span class="btn-text">Download Instagram</span>
-                            <div class="loading-indicator ml-2">
+                        <div id="tiktok-loading" class="hidden mt-6">
+                            <div class="flex items-center justify-center space-x-3 py-8">
                                 <div class="spinner"></div>
+                                <span>Analyzing TikTok video...</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div id="tiktok-progress" class="progress-bar w-0"></div>
                             </div>
                         </div>
-                    </button>
-                </div>
 
-                <!-- Facebook Downloader Tab -->
-                <div id="facebook-tab" class="tab-content">
-                    <div class="mb-6">
-                        <label for="facebook-url" class="block text-sm font-medium text-gray-300 mb-2">Facebook URL</label>
-                        <div class="flex">
-                            <input type="text" id="facebook-url" placeholder="https://www.facebook.com/..." class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none input-glow">
-                            <button class="glow-button bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-r-lg relative overflow-hidden">
-                                <div class="relative z-10 flex items-center">
-                                    <span class="btn-text">Analyze</span>
-                                    <div class="loading-indicator ml-2">
-                                        <div class="spinner"></div>
+                        <div id="tiktok-results" class="hidden mt-6 fade-in">
+                            <div class="border-t pt-6">
+                                <div class="flex items-start space-x-4 mb-6">
+                                    <img id="tiktok-thumbnail" class="media-thumbnail" src="" alt="Video thumbnail">
+                                    <div class="flex-1">
+                                        <h3 id="tiktok-title" class="text-lg font-semibold mb-2"></h3>
+                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                                            <span id="tiktok-author"></span>
+                                            <span id="tiktok-likes"></span>
+                                            <span id="tiktok-duration"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </button>
-                        </div>
-                        <div class="text-xs text-gray-400 mt-1">
-                            <i class="fas fa-info-circle mr-1"></i> Supports videos, photos, stories, and reels
-                        </div>
-                    </div>
-
-                    <div class="card p-6 mb-6">
-                        <h3 class="text-lg font-medium mb-4">Download Options</h3>
-                        <div class="mb-6">
-                            <div class="flex flex-wrap gap-4">
-                                <div class="format-option">
-                                    <input type="radio" id="fb-hd-quality" name="fb-quality" value="hd" checked>
-                                    <label for="fb-hd-quality" class="flex items-center">
-                                        <i class="fas fa-film mr-2 text-blue-400"></i> HD Quality
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="fb-sd-quality" name="fb-quality" value="sd">
-                                    <label for="fb-sd-quality" class="flex items-center">
-                                        <i class="fas fa-video mr-2 text-blue-400"></i> SD Quality
-                                    </label>
-                                </div>
-                                <div class="format-option">
-                                    <input type="radio" id="fb-audio-only" name="fb-quality" value="audio">
-                                    <label for="fb-audio-only" class="flex items-center">
-                                        <i class="fas fa-music mr-2 text-blue-400"></i> Audio Only
-                                    </label>
+                                
+                                <div class="format-grid" id="tiktok-formats">
+                                    <!-- Dynamic format options will be inserted here -->
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <button class="glow-button bg-gradient-to-r from-indigo-600 to-green-500 hover:from-indigo-700 hover:to-green-600 w-full py-4 rounded-lg font-semibold text-white flex items-center justify-center relative overflow-hidden">
-                        <div class="relative z-10 flex items-center">
-                            <i class="fas fa-download mr-2"></i>
-                            <span class="btn-text">Download Facebook</span>
-                            <div class="loading-indicator ml-2">
-                                <div class="spinner"></div>
-                            </div>
-                        </div>
-                    </button>
                 </div>
 
-                <!-- Tools Tab -->
-                <div id="tools-tab" class="tab-content">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="card p-6 hover:bg-gray-800 transition">
-                            <div class="text-3xl mb-4 text-blue-400">
-                                <i class="fas fa-video"></i>
-                            </div>
-                            <h3 class="text-lg font-medium mb-2">Video Converter</h3>
-                            <p class="text-sm text-gray-400 mb-4">Convert videos between different formats including MP4, MKV, AVI, and more.</p>
-                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                <!-- Instagram Tab -->
+                <div id="instagram-tab" class="tab-content hidden">
+                    <div class="card rounded-xl p-6 shadow-lg">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <i class="fab fa-instagram text-2xl text-pink-500"></i>
+                            <h2 class="text-2xl font-bold">Instagram Downloader</h2>
                         </div>
-                        <div class="card p-6 hover:bg-gray-800 transition">
-                            <div class="text-3xl mb-4 text-green-400">
-                                <i class="fas fa-music"></i>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Instagram URL</label>
+                                <div class="relative">
+                                    <input type="url" id="instagram-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://www.instagram.com/p/...">
+                                    <div class="absolute right-3 top-3">
+                                        <i class="fas fa-link text-gray-400"></i>
+                                    </div>
+                                </div>
+                                <p id="instagram-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid Instagram URL</p>
                             </div>
-                            <h3 class="text-lg font-medium mb-2">Audio Converter</h3>
-                            <p class="text-sm text-gray-400 mb-4">Convert audio files between MP3, WAV, FLAC, AAC and other formats.</p>
-                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                            
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                                <div class="flex items-start space-x-3">
+                                    <i class="fas fa-info-circle text-yellow-600 mt-0.5"></i>
+                                    <div class="text-sm">
+                                        <p class="font-medium text-yellow-800 dark:text-yellow-200">Supported Content:</p>
+                                        <ul class="mt-1 text-yellow-700 dark:text-yellow-300">
+                                            <li>• Photos and Videos</li>
+                                            <li>• Stories (within 24 hours)</li>
+                                            <li>• IGTV videos</li>
+                                            <li>• Reels</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button id="instagram-analyze" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-search mr-2"></i>
+                                    Analyze Post
+                                </button>
+                                <button id="instagram-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-paste mr-2"></i>
+                                    Paste
+                                </button>
+                            </div>
                         </div>
-                        <div class="card p-6 hover:bg-gray-800 transition">
-                            <div class="text-3xl mb-4 text-red-400">
-                                <i class="fas fa-cut"></i>
+
+                        <div id="instagram-loading" class="hidden mt-6">
+                            <div class="flex items-center justify-center space-x-3 py-8">
+                                <div class="spinner"></div>
+                                <span>Analyzing Instagram post...</span>
                             </div>
-                            <h3 class="text-lg font-medium mb-2">Video Trimmer</h3>
-                            <p class="text-sm text-gray-400 mb-4">Cut and trim videos to your desired length without quality loss.</p>
-                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div id="instagram-progress" class="progress-bar w-0"></div>
+                            </div>
                         </div>
-                        <div class="card p-6 hover:bg-gray-800 transition">
-                            <div class="text-3xl mb-4 text-yellow-400">
-                                <i class="fas fa-closed-captioning"></i>
+
+                        <div id="instagram-results" class="hidden mt-6 fade-in">
+                            <div class="border-t pt-6">
+                                <div class="flex items-start space-x-4 mb-6">
+                                    <img id="instagram-thumbnail" class="media-thumbnail" src="" alt="Post thumbnail">
+                                    <div class="flex-1">
+                                        <h3 id="instagram-title" class="text-lg font-semibold mb-2"></h3>
+                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                                            <span id="instagram-author"></span>
+                                            <span id="instagram-type"></span>
+                                            <span id="instagram-date"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="format-grid" id="instagram-formats">
+                                    <!-- Dynamic format options will be inserted here -->
+                                </div>
                             </div>
-                            <h3 class="text-lg font-medium mb-2">Subtitle Generator</h3>
-                            <p class="text-sm text-gray-400 mb-4">Automatically generate subtitles for your videos using AI technology.</p>
-                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
                         </div>
-                        <div class="card p-6 hover:bg-gray-800 transition">
-                            <div class="text-3xl mb-4 text-purple-400">
-                                <i class="fas fa-compress-arrows-alt"></i>
-                            </div>
-                            <h3 class="text-lg font-medium mb-2">Video Compressor</h3>
-                            <p class="text-sm text-gray-400 mb-4">Reduce video file size while maintaining good quality for easy sharing.</p>
-                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                    </div>
+                </div>
+
+                <!-- Facebook Tab -->
+                <div id="facebook-tab" class="tab-content hidden">
+                    <div class="card rounded-xl p-6 shadow-lg">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <i class="fab fa-facebook text-2xl text-blue-600"></i>
+                            <h2 class="text-2xl font-bold">Facebook Downloader</h2>
                         </div>
-                        <div class="card p-6 hover:bg-gray-800 transition">
-                            <div class="text-3xl mb-4 text-pink-400">
-                                <i class="fas fa-images"></i>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Facebook URL</label>
+                                <div class="relative">
+                                    <input type="url" id="facebook-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://www.facebook.com/...">
+                                    <div class="absolute right-3 top-3">
+                                        <i class="fas fa-link text-gray-400"></i>
+                                    </div>
+                                </div>
+                                <p id="facebook-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid Facebook URL</p>
                             </div>
-                            <h3 class="text-lg font-medium mb-2">Image Extractor</h3>
-                            <p class="text-sm text-gray-400 mb-4">Extract all images from videos and create high-quality screenshots.</p>
-                            <a href="#" class="text-indigo-400 text-sm font-medium hover:text-indigo-300 transition">Use Tool →</a>
+                            
+                            <div class="flex space-x-4">
+                                <button id="facebook-analyze" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-search mr-2"></i>
+                                    Analyze Video
+                                </button>
+                                <button id="facebook-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-paste mr-2"></i>
+                                    Paste
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="facebook-loading" class="hidden mt-6">
+                            <div class="flex items-center justify-center space-x-3 py-8">
+                                <div class="spinner"></div>
+                                <span>Analyzing Facebook video...</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div id="facebook-progress" class="progress-bar w-0"></div>
+                            </div>
+                        </div>
+
+                        <div id="facebook-results" class="hidden mt-6 fade-in">
+                            <div class="border-t pt-6">
+                                <div class="flex items-start space-x-4 mb-6">
+                                    <img id="facebook-thumbnail" class="media-thumbnail" src="" alt="Video thumbnail">
+                                    <div class="flex-1">
+                                        <h3 id="facebook-title" class="text-lg font-semibold mb-2"></h3>
+                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                                            <span id="facebook-author"></span>
+                                            <span id="facebook-views"></span>
+                                            <span id="facebook-duration"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="format-grid" id="facebook-formats">
+                                    <!-- Dynamic format options will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Twitter Tab -->
+                <div id="twitter-tab" class="tab-content hidden">
+                    <div class="card rounded-xl p-6 shadow-lg">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <i class="fab fa-twitter text-2xl text-blue-400"></i>
+                            <h2 class="text-2xl font-bold">Twitter Downloader</h2>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Twitter URL</label>
+                                <div class="relative">
+                                    <input type="url" id="twitter-url" class="w-full px-4 py-3 border rounded-lg transition-all duration-300" placeholder="https://twitter.com/username/status/...">
+                                    <div class="absolute right-3 top-3">
+                                        <i class="fas fa-link text-gray-400"></i>
+                                    </div>
+                                </div>
+                                <p id="twitter-error" class="text-red-500 text-sm mt-1 hidden">Please enter a valid Twitter URL</p>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button id="twitter-analyze" class="flex-1 bg-blue-400 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-search mr-2"></i>
+                                    Analyze Tweet
+                                </button>
+                                <button id="twitter-paste" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium transition-all duration-300 hover-scale">
+                                    <i class="fas fa-paste mr-2"></i>
+                                    Paste
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="twitter-loading" class="hidden mt-6">
+                            <div class="flex items-center justify-center space-x-3 py-8">
+                                <div class="spinner"></div>
+                                <span>Analyzing tweet...</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div id="twitter-progress" class="progress-bar w-0"></div>
+                            </div>
+                        </div>
+
+                        <div id="twitter-results" class="hidden mt-6 fade-in">
+                            <div class="border-t pt-6">
+                                <div class="flex items-start space-x-4 mb-6">
+                                    <img id="twitter-thumbnail" class="media-thumbnail" src="" alt="Tweet media">
+                                    <div class="flex-1">
+                                        <h3 id="twitter-title" class="text-lg font-semibold mb-2"></h3>
+                                        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+                                            <span id="twitter-author"></span>
+                                            <span id="twitter-date"></span>
+                                            <span id="twitter-likes"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="format-grid" id="twitter-formats">
+                                    <!-- Dynamic format options will be inserted here -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Features Section -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card rounded-xl p-6 text-center hover-scale">
+                    <i class="fas fa-shield-alt text-3xl text-green-500 mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">Secure & Safe</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Your privacy is protected. No data stored on our servers.</p>
+                </div>
+                <div class="card rounded-xl p-6 text-center hover-scale">
+                    <i class="fas fa-bolt text-3xl text-yellow-500 mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">Lightning Fast</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Download your favorite content in seconds with optimized servers.</p>
+                </div>
+                <div class="card rounded-xl p-6 text-center hover-scale">
+                    <i class="fas fa-mobile-alt text-3xl text-blue-500 mb-4"></i>
+                    <h3 class="text-lg font-semibold mb-2">Mobile Friendly</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Works perfectly on all devices - desktop, tablet, and mobile.</p>
+                </div>
+            </div>
+        </main>
 
         <!-- Footer -->
-        <footer class="mt-16 border-t border-gray-800 pt-8 pb-16">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <h3 class="text-lg font-semibold mb-4 brand-text">MALIK SAHAB</h3>
-                    <p class="text-sm text-gray-400">Advanced media downloader toolkit with support for multiple platforms. Download videos, audio, and more with just a few clicks.</p>
+        <footer class="mt-16 py-8 border-t border-gray-200 dark:border-gray-700">
+            <div class="max-w-6xl mx-auto px-4 text-center">
+                <div class="flex justify-center items-center space-x-6 mb-4">
+                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-youtube text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-telegram text-xl"></i>
+                    </a>
                 </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-white transition">Home</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-white transition">Features</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-white transition">Help & Support</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-white transition">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
-                    <div class="flex space-x-4 mb-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                    </div>
-                    <p class="text-xs text-gray-500">© 2025 MALIK SAHAB. All rights reserved.</p>
-                </div>
+                <p class="text-gray-600 dark:text-gray-400">&copy; 2025 MALIK SAHAB. All rights reserved.</p>
+                <p class="text-sm text-gray-500 mt-2">Professional Media Downloader - Made with ❤️</p>
             </div>
         </footer>
     </div>
 
     <script>
-        // Tab switching functionality
+        // Global variables
+        let currentTab = 'youtube';
+        let isDarkMode = false;
+
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            const tabBtns = document.querySelectorAll('.nav-tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tabId = btn.getAttribute('data-tab');
-                    
-                    // Update active button
-                    tabBtns.forEach(b => {
-                        b.classList.remove('active');
-                        b.classList.add('text-gray-400');
-                        b.classList.remove('text-white');
-                    });
-                    
-                    btn.classList.add('active');
-                    btn.classList.add('text-white');
-                    btn.classList.remove('text-gray-400');
-                    
-                    // Update active content
-                    tabContents.forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    
-                    document.getElementById(`${tabId}-tab`).classList.add('active');
-                });
+            initializeTabs();
+            initializeTheme();
+            initializeEventListeners();
+            updateTabIndicator();
+        });
+
+        // Theme management
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                toggleTheme();
+            }
+        }
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark', isDarkMode);
+            document.body.classList.toggle('light', !isDarkMode);
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        // Tab management
+        function initializeTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
             });
-            
-            // Button loading state simulation
-            const actionButtons = document.querySelectorAll('.glow-button');
-            
-            actionButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // If it's an "Analyze" button (contains the text "Analyze")
-                    if (this.querySelector('.btn-text').innerText.includes('Analyze')) {
-                        this.classList.add('loading');
-                        
-                        // Simulate API request
-                        setTimeout(() => {
-                            this.classList.remove('loading');
-                        }, 1500);
-                    }
-                    // If it's a download button
-                    else if (this.querySelector('.btn-text').innerText.includes('Download')) {
-                        this.classList.add('loading');
-                        
-                        // Simulate download process
-                        setTimeout(() => {
-                            this.classList.remove('loading');
-                            // You would trigger the actual download here
-                        }, 2000);
-                    }
-                });
-            });
-            
-            // Input validation for URL fields
-            const urlInputs = document.querySelectorAll('input[type="text"][id$="-url"]');
-            
-            urlInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    const value = this.value.trim();
-                    const analyzeBtn = this.parentElement.querySelector('.glow-button');
-                    
-                    if (value && (value.startsWith('http://') || value.startsWith('https://'))) {
-                        analyzeBtn.disabled = false;
-                    } else {
-                        analyzeBtn.disabled = true;
-                    }
-                });
-                
-                // Trigger the input event to set initial state
-                input.dispatchEvent(new Event('input'));
-            });
-            
-            // Mouseenter glow effect
-            const glowElement = document.createElement('div');
-            glowElement.classList.add('glow-effect');
-            document.body.appendChild(glowElement);
-            
-            document.addEventListener('mousemove', (e) => {
-                // Only show glow effect on interactive elements
-                const target = e.target;
-                const isInteractive = target.classList.contains('glow-button') || 
-                                     target.closest('.glow-button') || 
-                                     target.classList.contains('nav-tab') ||
-                                     target.classList.contains('format-option');
-                
-                if (isInteractive) {
-                    const rect = target.getBoundingClientRect();
-                    const x = rect.left + rect.width / 2;
-                    const y = rect.top + rect.height / 2;
-                    
-                    glowElement.style.left = `${x - 75}px`;
-                    glowElement.style.top = `${y - 75}px`;
-                    glowElement.style.opacity = '0.3';
-                } else {
-                    glowElement.style.opacity = '0';
+        }
+
+        function switchTab(tabName) {
+            // Update active button
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-white', 'dark:bg-gray-700', 'shadow-sm');
+                if (btn.dataset.tab === tabName) {
+                    btn.classList.add('active', 'bg-white', 'dark:bg-gray-700', 'shadow-sm');
                 }
             });
+
+            // Update active content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('active');
+            });
+            
+            const activeContent = document.getElementById(`${tabName}-tab`);
+            activeContent.classList.remove('hidden');
+            activeContent.classList.add('active');
+
+            currentTab = tabName;
+            updateTabIndicator();
+        }
+
+        function updateTabIndicator() {
+            const activeBtn = document.querySelector('.tab-btn.active');
+            const indicator = document.querySelector('.tab-indicator');
+            if (activeBtn && indicator) {
+                const rect = activeBtn.getBoundingClientRect();
+                const container = activeBtn.parentElement.getBoundingClientRect();
+                indicator.style.width = `${activeBtn.offsetWidth}px`;
+                indicator.style.left = `${activeBtn.offsetLeft}px`;
+            }
+        }
+
+        // Event listeners
+        function initializeEventListeners() {
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            // Platform-specific event listeners
+            initializePlatformListeners('youtube');
+            initializePlatformListeners('tiktok');
+            initializePlatformListeners('instagram');
+            initializePlatformListeners('facebook');
+            initializePlatformListeners('twitter');
+
+            // Window resize handler for tab indicator
+            window.addEventListener('resize', updateTabIndicator);
+        }
+
+        function initializePlatformListeners(platform) {
+            const analyzeBtn = document.getElementById(`${platform}-analyze`);
+            const pasteBtn = document.getElementById(`${platform}-paste`);
+            const urlInput = document.getElementById(`${platform}-url`);
+
+            if (analyzeBtn) {
+                analyzeBtn.addEventListener('click', () => analyzeMedia(platform));
+            }
+
+            if (pasteBtn) {
+                pasteBtn.addEventListener('click', () => pasteFromClipboard(platform));
+            }
+
+            if (urlInput) {
+                urlInput.addEventListener('input', () => clearError(platform));
+                urlInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        analyzeMedia(platform);
+                    }
+                });
+            }
+        }
+
+        // Clipboard functionality
+        async function pasteFromClipboard(platform) {
+            try {
+                const text = await navigator.clipboard.readText();
+                const urlInput = document.getElementById(`${platform}-url`);
+                urlInput.value = text;
+                clearError(platform);
+                showToast('URL pasted successfully!', 'success');
+            } catch (err) {
+                showToast('Unable to access clipboard', 'error');
+            }
+        }
+
+        // URL validation
+        function validateURL(url, platform) {
+            const patterns = {
+                youtube: /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/,
+                tiktok: /^(https?:\/\/)?(www\.)?tiktok\.com\/.+/,
+                instagram: /^(https?:\/\/)?(www\.)?instagram\.com\/.+/,
+                facebook: /^(https?:\/\/)?(www\.)?(facebook\.com|fb\.watch)\/.+/,
+                twitter: /^(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\/.+/
+            };
+
+            return patterns[platform]?.test(url) || false;
+        }
+
+        function showError(platform, message) {
+            const errorElement = document.getElementById(`${platform}-error`);
+            const urlInput = document.getElementById(`${platform}-url`);
+            
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            urlInput.classList.add('error-input');
+        }
+
+        function clearError(platform) {
+            const errorElement = document.getElementById(`${platform}-error`);
+            const urlInput = document.getElementById(`${platform}-url`);
+            
+            errorElement.classList.add('hidden');
+            urlInput.classList.remove('error-input');
+        }
+
+        // Main analysis function
+        async function analyzeMedia(platform) {
+            const urlInput = document.getElementById(`${platform}-url`);
+            const url = urlInput.value.trim();
+
+            // Input validation
+            if (!url) {
+                showError(platform, 'Please enter a URL');
+                return;
+            }
+
+            if (!validateURL(url, platform)) {
+                showError(platform, `Please enter a valid ${platform} URL`);
+                return;
+            }
+
+            clearError(platform);
+            showLoading(platform, true);
+
+            try {
+                // Simulate API call with realistic timing
+                await simulateAnalysis(platform, url);
+                
+                // Generate mock data for demonstration
+                const mediaData = await generateMockData(platform, url);
+                
+                showResults(platform, mediaData);
+                showToast('Analysis completed successfully!', 'success');
+                
+            } catch (error) {
+                showError(platform, 'Failed to analyze media. Please try again.');
+                showToast('Analysis failed. Please check the URL and try again.', 'error');
+            } finally {
+                showLoading(platform, false);
+            }
+        }
+
+        // Loading state management
+        function showLoading(platform, show) {
+            const loadingElement = document.getElementById(`${platform}-loading`);
+            const analyzeBtn = document.getElementById(`${platform}-analyze`);
+            const progressBar = document.getElementById(`${platform}-progress`);
+
+            if (show) {
+                loadingElement.classList.remove('hidden');
+                analyzeBtn.disabled = true;
+                analyzeBtn.innerHTML = '<div class="spinner mr-2"></div>Analyzing...';
+                
+                // Animate progress bar
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress > 100) progress = 100;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                    }
+                }, 200);
+            } else {
+                loadingElement.classList.add('hidden');
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '<i class="fas fa-search mr-2"></i>Analyze';
+                progressBar.style.width = '0%';
+            }
+        }
+
+        // Simulate realistic API analysis
+        async function simulateAnalysis(platform, url) {
+            // Simulate network delay
+            const delay = Math.random() * 2000 + 1000; // 1-3 seconds
+            await new Promise(resolve => setTimeout(resolve, delay));
+            
+            // Simulate potential network errors (5% chance)
+            if (Math.random() < 0.05) {
+                throw new Error('Network error');
+            }
+        }
+
+        // Generate mock data for demonstration
+        async function generateMockData(platform, url) {
+            const mockData = {
+                youtube: {
+                    title: "Sample YouTube Video - Tutorial Guide",
+                    thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+                    duration: "04:35",
+                    views: "1,234,567 views",
+                    channel: "MALIK SAHAB Official",
+                    formats: [
+                        { quality: "2160p", format: "MP4", size: "890 MB", type: "video", badge: "4k" },
+                        { quality: "1080p", format: "MP4", size: "445 MB", type: "video", badge: "hd" },
+                        { quality: "720p", format: "MP4", size: "234 MB", type: "video", badge: "hd" },
+                        { quality: "480p", format: "MP4", size: "123 MB", type: "video", badge: "sd" },
+                        { quality: "320kbps", format: "MP3", size: "4.2 MB", type: "audio", badge: "audio" },
+                        { quality: "128kbps", format: "MP3", size: "1.8 MB", type: "audio", badge: "audio" }
+                    ]
+                },
+                tiktok: {
+                    title: "Amazing TikTok Video",
+                    thumbnail: "https://via.placeholder.com/120x90/FF0050/FFFFFF?text=TikTok",
+                    author: "@username",
+                    likes: "12.5K likes",
+                    duration: "0:15",
+                    formats: [
+                        { quality: "720p", format: "MP4", size: "5.2 MB", type: "video", badge: "hd" },
+                        { quality: "480p", format: "MP4", size: "3.1 MB", type: "video", badge: "sd" },
+                        { quality: "Audio", format: "MP3", size: "240 KB", type: "audio", badge: "audio" }
+                    ]
+                },
+                instagram: {
+                    title: "Instagram Post",
+                    thumbnail: "https://via.placeholder.com/120x90/E4405F/FFFFFF?text=IG",
+                    author: "@username",
+                    type: "Photo",
+                    date: "2 hours ago",
+                    formats: [
+                        { quality: "Original", format: "JPG", size: "1.8 MB", type: "image", badge: "hd" },
+                        { quality: "720p", format: "MP4", size: "8.5 MB", type: "video", badge: "hd" },
+                        { quality: "480p", format: "MP4", size: "4.2 MB", type: "video", badge: "sd" }
+                    ]
+                },
+                facebook: {
+                    title: "Facebook Video Post",
+                    thumbnail: "https://via.placeholder.com/120x90/1877F2/FFFFFF?text=FB",
+                    author: "Page Name",
+                    views: "50K views",
+                    duration: "2:30",
+                    formats: [
+                        { quality: "1080p", format: "MP4", size: "125 MB", type: "video", badge: "hd" },
+                        { quality: "720p", format: "MP4", size: "78 MB", type: "video", badge: "hd" },
+                        { quality: "480p", format: "MP4", size: "45 MB", type: "video", badge: "sd" }
+                    ]
+                },
+                twitter: {
+                    title: "Twitter Video Tweet",
+                    thumbnail: "https://via.placeholder.com/120x90/1DA1F2/FFFFFF?text=Twitter",
+                    author: "@username",
+                    date: "1 hour ago",
+                    likes: "2.5K likes",
+                    formats: [
+                        { quality: "720p", format: "MP4", size: "15.2 MB", type: "video", badge: "hd" },
+                        { quality: "480p", format: "MP4", size: "8.7 MB", type: "video", badge: "sd" }
+                    ]
+                }
+            };
+
+            return mockData[platform] || mockData.youtube;
+        }
+
+        // Display results
+        function showResults(platform, data) {
+            const resultsElement = document.getElementById(`${platform}-results`);
+            
+            // Update media info
+            document.getElementById(`${platform}-title`).textContent = data.title;
+            document.getElementById(`${platform}-thumbnail`).src = data.thumbnail;
+            
+            // Update platform-specific info
+            updatePlatformSpecificInfo(platform, data);
+            
+            // Generate format options
+            generateFormatOptions(platform, data.formats);
+            
+            // Show results
+            resultsElement.classList.remove('hidden');
+            resultsElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function updatePlatformSpecificInfo(platform, data) {
+            const elements = {
+                youtube: ['duration', 'views', 'channel'],
+                tiktok: ['author', 'likes', 'duration'],
+                instagram: ['author', 'type', 'date'],
+                facebook: ['author', 'views', 'duration'],
+                twitter: ['author', 'date', 'likes']
+            };
+
+            elements[platform]?.forEach(prop => {
+                const element = document.getElementById(`${platform}-${prop}`);
+                if (element && data[prop]) {
+                    element.textContent = data[prop];
+                }
+            });
+        }
+
+        function generateFormatOptions(platform, formats) {
+            const container = document.getElementById(`${platform}-formats`);
+            container.innerHTML = '';
+
+            formats.forEach(format => {
+                const formatElement = createFormatElement(format, platform);
+                container.appendChild(formatElement);
+            });
+        }
+
+        function createFormatElement(format, platform) {
+            const div = document.createElement('div');
+            div.className = 'download-item p-4 bg-gray-50 dark:bg-gray-800 rounded-lg';
+            
+            div.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-${format.type === 'video' ? 'video' : format.type === 'audio' ? 'music' : 'image'} text-lg text-blue-500"></i>
+                        <div>
+                            <div class="font-medium">${format.quality}</div>
+                            <div class="text-sm text-gray-500">${format.format} • ${format.size}</div>
+                        </div>
+                    </div>
+                    <span class="quality-badge quality-${format.badge}">${format.badge.toUpperCase()}</span>
+                </div>
+                <button onclick="downloadFile('${platform}', '${format.quality}', '${format.format}')" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 hover-scale">
+                    <i class="fas fa-download mr-2"></i>
+                    Download ${format.format}
+                </button>
+            `;
+
+            return div;
+        }
+
+        // Download functionality
+        async function downloadFile(platform, quality, format) {
+            showToast(`Preparing ${format} download...`, 'info');
+            
+            // Simulate download preparation
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // In a real implementation, this would trigger the actual download
+            showToast(`${format} download started successfully!`, 'success');
+            
+            // For demonstration, we'll simulate a download link
+            const link = document.createElement('a');
+            link.href = '#';
+            link.download = `media_${Date.now()}.${format.toLowerCase()}`;
+            link.textContent = 'Download';
+            
+            // Trigger download simulation
+            console.log(`Downloading: ${platform} - ${quality} - ${format}`);
+        }
+
+        // Toast notification system
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            const messageEl = document.getElementById('toast-message');
+
+            // Set icon and styling based on type
+            const configs = {
+                success: { icon: 'fas fa-check-circle text-green-500', bg: 'bg-green-50 border-green-200' },
+                error: { icon: 'fas fa-exclamation-circle text-red-500', bg: 'bg-red-50 border-red-200' },
+                info: { icon: 'fas fa-info-circle text-blue-500', bg: 'bg-blue-50 border-blue-200' },
+                warning: { icon: 'fas fa-exclamation-triangle text-yellow-500', bg: 'bg-yellow-50 border-yellow-200' }
+            };
+
+            const config = configs[type] || configs.success;
+            icon.className = config.icon;
+            messageEl.textContent = message;
+
+            // Show toast
+            toast.classList.add('show');
+
+            // Auto hide after 3 seconds
+            setTimeout(() => hideToast(), 3000);
+        }
+
+        function hideToast() {
+            document.getElementById('toast').classList.remove('show');
+        }
+
+        // Utility functions
+        function sanitizeInput(input) {
+            const div = document.createElement('div');
+            div.textContent = input;
+            return div.innerHTML;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function formatDuration(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + V for paste
+            if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+                const activeInput = document.querySelector(`#${currentTab}-url`);
+                if (activeInput && document.activeElement !== activeInput) {
+                    pasteFromClipboard(currentTab);
+                    e.preventDefault();
+                }
+            }
+            
+            // Enter key for analyze
+            if (e.key === 'Enter' && document.activeElement.id.includes('-url')) {
+                const platform = document.activeElement.id.split('-')[0];
+                analyzeMedia(platform);
+            }
         });
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', function() {
+                const perfData = performance.timing;
+                const loadTime = perfData.loadEventEnd - perfData.navigationStart;
+                console.log(`Page loaded in ${loadTime}ms`);
+            });
+        }
+
+        // Service Worker registration for offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered with scope: ', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('SW registration failed: ', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
