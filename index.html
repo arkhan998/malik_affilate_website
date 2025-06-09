@@ -6,73 +6,55 @@
     <title>TikTok Pro - Download Videos</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for stylish text -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Custom styles for the glowing/wedding light effect */
+        /* UPDATED: Static background for better visibility */
         body {
-            background-color: #0c001f;
+            background-color: #0a192f; /* Dark blue background */
             font-family: 'Rajdhani', sans-serif;
-            position: relative;
-            overflow-x: hidden;
         }
-
-        /* Animated background gradient to simulate lighting */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff, #00ffff);
-            background-size: 400% 400%;
-            animation: gradient-animation 15s ease infinite;
-            filter: blur(100px);
-            z-index: -1;
-        }
-
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Custom font for the title */
         .font-orbitron {
             font-family: 'Orbitron', sans-serif;
         }
-        
-        /* Neon/Glow effect for text */
+        /* UPDATED: Adjusted glow effect for better readability */
         .text-glow {
-            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+            color: #64ffda; /* Bright cyan color */
+            text-shadow: 0 0 3px #64ffda, 0 0 10px rgba(100, 255, 218, 0.5);
         }
-
-        /* Neon/Glow effect for buttons and borders */
         .neon-border {
-            border: 2px solid #00ffff;
-            box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff inset;
+            border: 1px solid #64ffda;
+            box-shadow: 0 0 8px rgba(100, 255, 218, 0.4);
+            transition: all 0.3s ease;
         }
-        .neon-border-yellow {
-             border: 2px solid #facc15;
-             box-shadow: 0 0 8px #facc15, 0 0 12px #facc15 inset;
+        .neon-border:hover {
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.7);
+        }
+        .btn-primary {
+            background-color: #64ffda;
+            color: #0a192f;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #fff;
+            box-shadow: 0 0 20px #64ffda;
         }
     </style>
 </head>
-<body class="text-white">
+<body class="text-gray-200">
 
     <!-- WhatsApp Channel Join Popup -->
-    <div id="whatsapp-popup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 transition-opacity duration-300">
-        <div class="bg-yellow-400 text-black rounded-xl p-8 max-w-sm w-full text-center relative shadow-2xl shadow-yellow-400/30">
-            <button id="close-popup" class="absolute top-2 right-3 text-2xl font-bold">&times;</button>
-            <h2 class="text-3xl font-bold mb-2">JOIN WHATSAPP CHANNEL</h2>
-            <p class="mb-6">Stay ahead with exclusive updates! Subscribe now and never miss the latest news!</p>
-            <a href="https://whatsapp.com/channel/0029VaN8WMOHFxP0SLAKKu0P" target="_blank" class="bg-black text-white font-bold py-3 px-8 rounded-lg inline-block transition-transform duration-200 hover:scale-105">
+    <div id="whatsapp-popup" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300 pointer-events-none">
+        <div class="bg-gray-800 border border-cyan-400 text-white rounded-xl p-8 max-w-sm w-full text-center relative shadow-2xl shadow-cyan-400/20">
+            <button id="close-popup" class="absolute top-2 right-3 text-2xl font-bold text-gray-400 hover:text-white">&times;</button>
+            <h2 class="text-3xl font-bold mb-2 text-cyan-300">JOIN WHATSAPP CHANNEL</h2>
+            <p class="mb-6 text-gray-300">Stay ahead with exclusive updates! Subscribe now!</p>
+            <a href="https://whatsapp.com/channel/0029VaN8WMOHFxP0SLAKKu0P" target="_blank" class="bg-cyan-400 text-black font-bold py-3 px-8 rounded-lg inline-block transition-transform duration-200 hover:scale-105">
                 JOIN NOW
             </a>
         </div>
@@ -83,40 +65,31 @@
         
         <header class="text-center mb-8">
             <h1 class="text-6xl md:text-7xl font-orbitron font-bold text-glow">TIKTOK PRO</h1>
-            <p class="text-lg text-cyan-200 mt-2">Download High Quality TikTok Videos Without Watermark</p>
+            <p class="text-lg text-gray-300 mt-2">Download High Quality TikTok Videos Without Watermark</p>
         </header>
 
         <main class="w-full max-w-lg text-center">
             <!-- Input and Download Button -->
             <div class="flex flex-col sm:flex-row gap-4 mb-6">
-                <input id="tiktok-url" type="text" placeholder="Paste TikTok video link here..." class="flex-grow bg-gray-800/50 border-2 border-cyan-400 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-300 transition-all duration-300">
-                <button id="download-btn" class="bg-yellow-400 text-black font-bold text-lg px-8 py-3 rounded-lg neon-border-yellow transition-transform duration-200 hover:scale-105">
+                <input id="tiktok-url" type="text" placeholder="Paste TikTok video link here..." class="flex-grow bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-300">
+                <button id="download-btn" class="btn-primary font-bold text-lg px-8 py-3 rounded-lg">
                     Download Now
                 </button>
-            </div>
-
-            <!-- Features -->
-            <div class="grid grid-cols-2 gap-4 mb-8">
-                <div class="bg-black/30 neon-border rounded-lg p-3">FREE</div>
-                <div class="bg-black/30 neon-border rounded-lg p-3">WITHOUT WATERMARK</div>
-                <div class="bg-black/30 neon-border rounded-lg p-3">FAST & SECURE</div>
-                <div class="bg-black/30 neon-border rounded-lg p-3">UNLIMITED DOWNLOADS</div>
             </div>
             
             <!-- Result/Loader Area -->
             <div id="result" class="mt-8"></div>
 
-
             <!-- Social Links -->
             <div class="flex justify-center items-center gap-6 mt-12">
-                 <a href="https://whatsapp.com/channel/0029VaN8WMOHFxP0SLAKKu0P" target="_blank" class="text-4xl text-green-400 transition-transform duration-200 hover:scale-110 hover:text-green-300"><i class="fab fa-whatsapp"></i></a>
-                 <a href="https://github.com/arkhan998" target="_blank" class="text-4xl text-gray-300 transition-transform duration-200 hover:scale-110 hover:text-white"><i class="fab fa-github"></i></a>
-                 <a href="https://www.youtube.com/@technicalmalikoffical" target="_blank" class="text-4xl text-red-500 transition-transform duration-200 hover:scale-110 hover:text-red-400"><i class="fab fa-youtube"></i></a>
+                 <a href="https://whatsapp.com/channel/0029VaN8WMOHFxP0SLAKKu0P" target="_blank" class="text-3xl text-green-400 transition-transform duration-200 hover:scale-110 hover:text-green-300"><i class="fab fa-whatsapp"></i></a>
+                 <a href="https://github.com/arkhan998" target="_blank" class="text-3xl text-gray-300 transition-transform duration-200 hover:scale-110 hover:text-white"><i class="fab fa-github"></i></a>
+                 <a href="https://www.youtube.com/@technicalmalikoffical" target="_blank" class="text-3xl text-red-500 transition-transform duration-200 hover:scale-110 hover:text-red-400"><i class="fab fa-youtube"></i></a>
             </div>
         </main>
         
-        <footer class="mt-12 text-center text-gray-400">
-            <p>Developer <span class="font-bold text-cyan-300">MALIK SAHAB</span></p>
+        <footer class="mt-12 text-center text-gray-500">
+            <p>Developer <span class="font-bold text-cyan-400">MALIK SAHAB</span></p>
         </footer>
     </div>
 
@@ -127,17 +100,15 @@
 
         window.addEventListener('load', () => {
             setTimeout(() => {
-                whatsappPopup.style.display = 'flex';
-                setTimeout(() => whatsappPopup.style.opacity = '1', 50);
+                whatsappPopup.classList.remove('opacity-0', 'pointer-events-none');
             }, 1000);
         });
 
         closePopupButton.addEventListener('click', () => {
-            whatsappPopup.style.opacity = '0';
-            setTimeout(() => whatsappPopup.style.display = 'none', 300);
+            whatsappPopup.classList.add('opacity-0', 'pointer-events-none');
         });
         
-        // --- Downloader Logic (Backend Functionality) ---
+        // --- Downloader Logic ---
         const downloadBtn = document.getElementById('download-btn');
         const urlInput = document.getElementById('tiktok-url');
         const resultDiv = document.getElementById('result');
@@ -148,32 +119,28 @@
                 displayMessage('error', 'Please paste a TikTok video URL first.');
                 return;
             }
-            if (!videoUrl.startsWith('http')) {
-                displayMessage('error', 'Please enter a valid URL.');
+            if (!videoUrl.includes('tiktok.com')) {
+                displayMessage('error', 'Please enter a valid TikTok URL.');
                 return;
             }
             fetchVideoInfo(videoUrl);
         });
 
-        // #### UPDATED FUNCTION to use the proxy ####
+        // #### UPDATED FUNCTION to call the new scraper API ####
         async function fetchVideoInfo(url) {
             displayMessage('loading', 'Fetching video details, please wait...');
             
-            // We now call our own API endpoint (the proxy on Vercel)
-            const requestUrl = `/api/tiktok?url=${encodeURIComponent(url)}`;
+            // Call our new scraper API endpoint
+            const requestUrl = `/api/scrape?url=${encodeURIComponent(url)}`;
 
             try {
-                // The fetch call now goes to our Vercel function, not the external API
                 const response = await fetch(requestUrl);
-                
                 const data = await response.json();
 
-                // Check the response from our proxy
-                if (response.ok && data.status === true && data.result) {
+                if (response.ok && data.status === true) {
                     displayResult(data.result);
                 } else {
-                    // Show the error message provided by our proxy API
-                    throw new Error(data.message || data.error || 'Could not process the video. The link might be invalid.');
+                    throw new Error(data.message || 'Could not process the video.');
                 }
             } catch (error) {
                 console.error('Download Error:', error);
@@ -187,32 +154,31 @@
             resultDiv.innerHTML = `<div class="bg-gray-800/60 p-4 rounded-lg ${colorClass}">${iconHtml}${message}</div>`;
         }
         
+        // #### UPDATED FUNCTION to display results from the scraper ####
         function displayResult(result) {
             resultDiv.innerHTML = '';
-            const video = result.video;
-            const music = result.music;
-            const author = result.author;
+            const { title, cover, links } = result;
+
+            // Use a placeholder if cover image is not found
+            const coverImage = cover || 'https://placehold.co/300x400/0a192f/64ffda?text=Video';
 
             const resultCard = `
-                <div class="bg-black/40 neon-border rounded-lg p-6 text-left animate-fade-in">
+                <div class="bg-gray-800/50 neon-border rounded-lg p-6 text-left animate-fade-in">
                     <div class="flex flex-col md:flex-row gap-6">
-                        <img src="${video.cover}" alt="Video Thumbnail" class="w-full md:w-48 h-auto object-cover rounded-md border-2 border-cyan-500" onerror="this.style.display='none'">
+                        <img src="${coverImage}" alt="Video Thumbnail" class="w-full md:w-40 h-auto object-cover rounded-md border-2 border-cyan-400" onerror="this.src='https://placehold.co/300x400/0a192f/64ffda?text=Video'">
                         <div class="flex-grow">
-                            <p class="text-lg font-bold text-yellow-300">${video.title || 'TikTok Video'}</p>
-                            <p class="text-sm text-gray-300 mb-4">by @${author.unique_id}</p>
-                            <p class="text-sm text-gray-400 mb-1"><i class="fas fa-play mr-2"></i>Plays: ${video.play_count.toLocaleString()}</p>
-                             <p class="text-sm text-gray-400 mb-4"><i class="fas fa-music mr-2"></i>Music: ${music.title}</p>
+                            <p class="text-lg font-bold text-cyan-300">${title}</p>
                             
                             <div class="flex flex-col gap-3 mt-4">
-                                <a href="${video.no_watermark}" target="_blank" class="w-full text-center bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-200 hover:scale-105">
+                                ${links.noWatermark ? `
+                                <a href="${links.noWatermark}" target="_blank" class="w-full text-center bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-200 hover:scale-105">
                                     <i class="fas fa-download mr-2"></i>Download (No Watermark)
-                                </a>
-                                <a href="${video.watermark}" target="_blank" class="w-full text-center bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-200 hover:scale-105">
-                                    <i class="fas fa-download mr-2"></i>Download (With Watermark)
-                                </a>
-                                <a href="${music.play_url}" target="_blank" class="w-full text-center bg-purple-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-200 hover:scale-105">
+                                </a>` : ''}
+                                
+                                ${links.mp3 ? `
+                                <a href="${links.mp3}" target="_blank" class="w-full text-center bg-purple-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-200 hover:scale-105">
                                     <i class="fas fa-music mr-2"></i>Download Music (MP3)
-                                </a>
+                                </a>` : ''}
                             </div>
                         </div>
                     </div>
