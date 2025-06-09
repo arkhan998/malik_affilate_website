@@ -72,7 +72,6 @@
             <button id="close-popup" class="absolute top-2 right-3 text-2xl font-bold">&times;</button>
             <h2 class="text-3xl font-bold mb-2">JOIN WHATSAPP CHANNEL</h2>
             <p class="mb-6">Stay ahead with exclusive updates! Subscribe now and never miss the latest news!</p>
-            <!-- UPDATED: WhatsApp Channel Link -->
             <a href="https://whatsapp.com/channel/0029VaN8WMOHFxP0SLAKKu0P" target="_blank" class="bg-black text-white font-bold py-3 px-8 rounded-lg inline-block transition-transform duration-200 hover:scale-105">
                 JOIN NOW
             </a>
@@ -108,7 +107,7 @@
             <div id="result" class="mt-8"></div>
 
 
-            <!-- UPDATED: Social Links -->
+            <!-- Social Links -->
             <div class="flex justify-center items-center gap-6 mt-12">
                  <a href="https://whatsapp.com/channel/0029VaN8WMOHFxP0SLAKKu0P" target="_blank" class="text-4xl text-green-400 transition-transform duration-200 hover:scale-110 hover:text-green-300"><i class="fab fa-whatsapp"></i></a>
                  <a href="https://github.com/arkhan998" target="_blank" class="text-4xl text-gray-300 transition-transform duration-200 hover:scale-110 hover:text-white"><i class="fab fa-github"></i></a>
@@ -117,7 +116,6 @@
         </main>
         
         <footer class="mt-12 text-center text-gray-400">
-            <!-- UPDATED: Developer Name -->
             <p>Developer <span class="font-bold text-cyan-300">MALIK SAHAB</span></p>
         </footer>
     </div>
@@ -157,22 +155,25 @@
             fetchVideoInfo(videoUrl);
         });
 
+        // #### UPDATED FUNCTION to use the proxy ####
         async function fetchVideoInfo(url) {
             displayMessage('loading', 'Fetching video details, please wait...');
-            const apiKey = 'https://aemt.me/download/tiktokdl?url=';
-            const requestUrl = `${apiKey}${encodeURIComponent(url)}`;
+            
+            // We now call our own API endpoint (the proxy on Vercel)
+            const requestUrl = `/api/tiktok?url=${encodeURIComponent(url)}`;
 
             try {
+                // The fetch call now goes to our Vercel function, not the external API
                 const response = await fetch(requestUrl);
-                if (!response.ok) {
-                    throw new Error(`API error! Status: ${response.status}. The server might be down.`);
-                }
+                
                 const data = await response.json();
 
-                if (data.status === true && data.result) {
+                // Check the response from our proxy
+                if (response.ok && data.status === true && data.result) {
                     displayResult(data.result);
                 } else {
-                    throw new Error(data.message || 'Could not process the video. The link might be invalid or private.');
+                    // Show the error message provided by our proxy API
+                    throw new Error(data.message || data.error || 'Could not process the video. The link might be invalid.');
                 }
             } catch (error) {
                 console.error('Download Error:', error);
