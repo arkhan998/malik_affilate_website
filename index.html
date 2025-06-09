@@ -3,325 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MALIK Tools Hub</title>
-    <!-- Tailwind CSS CDN -->
+    <title>TikTok Pro - Download Videos</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts for stylish text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+        /* Custom styles for the glowing/wedding light effect */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5; /* Light grey background */
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            background-color: #0c001f;
+            font-family: 'Rajdhani', sans-serif;
+            position: relative;
+            overflow-x: hidden;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem;
-            flex-grow: 1;
+
+        /* Animated background gradient to simulate lighting */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff, #00ffff);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            filter: blur(100px);
+            z-index: -1;
         }
-        .card {
-            background-color: #ffffff;
-            border-radius: 1rem; /* More rounded corners */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: transform 0.2s ease-in-out;
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .card:hover {
-            transform: translateY(-5px); /* Slight lift on hover for premium feel */
+
+        /* Custom font for the title */
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
         }
-        .btn {
-            background-color: #4f46e5; /* Indigo */
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem; /* Rounded button */
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
+        
+        /* Neon/Glow effect for text */
+        .text-glow {
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
         }
-        .btn:hover {
-            background-color: #4338ca; /* Darker indigo on hover */
-            transform: translateY(-1px);
+
+        /* Neon/Glow effect for buttons and borders */
+        .neon-border {
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff inset;
         }
-        .btn:active {
-            transform: translateY(0);
-        }
-        input[type="text"], textarea {
-            border: 1px solid #d1d5db; /* Light grey border */
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
-            width: 100%;
-            font-size: 1rem;
-            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: #6366f1; /* Indigo focus border */
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* Light indigo shadow on focus */
-        }
-        .chat-message {
-            padding: 0.75rem 1rem;
-            border-radius: 1rem;
-            margin-bottom: 0.5rem;
-            max-width: 80%;
-        }
-        .user-message {
-            background-color: #e0e7ff; /* Light indigo for user */
-            align-self: flex-end;
-            margin-left: auto;
-        }
-        .bot-message {
-            background-color: #f3f4f6; /* Lighter grey for bot */
-            align-self: flex-start;
-            margin-right: auto;
-        }
-        .message-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            z-index: 1000;
-            display: none; /* Hidden by default */
-            text-align: center;
+        .neon-border-yellow {
+             border: 2px solid #facc15;
+             box-shadow: 0 0 8px #facc15, 0 0 12px #facc15 inset;
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
-    <!-- Message Box -->
-    <div id="messageBox" class="message-box"></div>
+<body class="text-white">
 
-    <header class="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-6 shadow-lg">
-        <div class="container flex justify-between items-center">
-            <h1 class="text-3xl font-bold tracking-tight">MALIK Tools Hub</h1>
-            <p class="text-lg hidden md:block">آپ کے سبھی ضروری ٹولز، ایک ہی جگہ پر۔</p>
+    <!-- WhatsApp Channel Join Popup -->
+    <div id="whatsapp-popup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 transition-opacity duration-300">
+        <div class="bg-yellow-400 text-black rounded-xl p-8 max-w-sm w-full text-center relative shadow-2xl shadow-yellow-400/30">
+            <button id="close-popup" class="absolute top-2 right-3 text-2xl font-bold">&times;</button>
+            <h2 class="text-3xl font-bold mb-2">JOIN WHATSAPP CHANNEL</h2>
+            <p class="mb-6">Stay ahead with exclusive updates! Subscribe now and never miss the latest news!</p>
+            <!-- UPDATED: WhatsApp Channel Link -->
+            <a href="https://whatsapp.com/channel/0029VaN8WMOHFxP0SLAKKu0P" target="_blank" class="bg-black text-white font-bold py-3 px-8 rounded-lg inline-block transition-transform duration-200 hover:scale-105">
+                JOIN NOW
+            </a>
         </div>
-    </header>
+    </div>
 
-    <main class="container flex-grow py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- URL Shortener Section -->
-            <section class="card">
-                <h2 class="text-2xl font-semibold mb-6 text-gray-800">اپنا لنک چھوٹا کریں</h2>
-                <div class="mb-4">
-                    <label for="longUrl" class="block text-gray-700 text-sm font-medium mb-2">لمبا URL ڈالیں:</label>
-                    <input type="text" id="longUrl" placeholder="https://آپ کی لمبی ویب سائٹ لنک.com" class="w-full">
-                </div>
-                <button id="shortenBtn" class="btn w-full mb-4">چھوٹا کریں</button>
-                <div id="shortenedUrlDisplay" class="hidden bg-gray-100 p-3 rounded-lg flex items-center justify-between">
-                    <span id="shortUrlText" class="text-indigo-700 font-medium break-all mr-4"></span>
-                    <button id="copyBtn" class="btn bg-green-500 hover:bg-green-600 flex-shrink-0">کاپی کریں</button>
-                </div>
-                <p id="urlError" class="text-red-500 text-sm mt-2 hidden"></p>
-            </section>
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 min-h-screen flex flex-col items-center justify-center">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-6xl md:text-7xl font-orbitron font-bold text-glow">TIKTOK PRO</h1>
+            <p class="text-lg text-cyan-200 mt-2">Download High Quality TikTok Videos Without Watermark</p>
+        </header>
 
-            <!-- AI Chatbot Section -->
-            <section class="card flex flex-col h-full">
-                <h2 class="text-2xl font-semibold mb-6 text-gray-800">AI چیٹ بوٹ سے بات کریں</h2>
-                <div id="chatDisplay" class="flex-grow bg-gray-50 p-4 rounded-lg mb-4 overflow-y-auto h-80 flex flex-col space-y-2">
-                    <!-- Chat messages will be appended here -->
-                    <div class="bot-message chat-message">السلام علیکم! میں آپ کا AI چیٹ بوٹ ہوں۔ کیسے مدد کر سکتا ہوں؟</div>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <input type="text" id="chatInput" placeholder="اپنا پیغام ٹائپ کریں..." class="flex-grow">
-                    <button id="sendBtn" class="btn flex-shrink-0">بھیجیں</button>
-                </div>
-                <p id="chatError" class="text-red-500 text-sm mt-2 hidden"></p>
-                <div id="loadingIndicator" class="text-center text-indigo-600 mt-2 hidden">لوڈنگ...</div>
-            </section>
-        </div>
-    </main>
+        <main class="w-full max-w-lg text-center">
+            <!-- Input and Download Button -->
+            <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                <input id="tiktok-url" type="text" placeholder="Paste TikTok video link here..." class="flex-grow bg-gray-800/50 border-2 border-cyan-400 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-300 transition-all duration-300">
+                <button id="download-btn" class="bg-yellow-400 text-black font-bold text-lg px-8 py-3 rounded-lg neon-border-yellow transition-transform duration-200 hover:scale-105">
+                    Download Now
+                </button>
+            </div>
 
-    <footer class="bg-gray-800 text-white py-6 mt-auto">
-        <div class="container text-center text-gray-400">
-            <p>&copy; 2025 MALIK Tools Hub. تمام حقوق محفوظ ہیں۔</p>
-            <p class="text-sm mt-2">FAMOFC APIs کے ذریعے تقویت یافتہ</p>
-        </div>
-    </footer>
+            <!-- Features -->
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-black/30 neon-border rounded-lg p-3">FREE</div>
+                <div class="bg-black/30 neon-border rounded-lg p-3">WITHOUT WATERMARK</div>
+                <div class="bg-black/30 neon-border rounded-lg p-3">FAST & SECURE</div>
+                <div class="bg-black/30 neon-border rounded-lg p-3">UNLIMITED DOWNLOADS</div>
+            </div>
+            
+            <!-- Result/Loader Area -->
+            <div id="result" class="mt-8"></div>
+
+
+            <!-- UPDATED: Social Links -->
+            <div class="flex justify-center items-center gap-6 mt-12">
+                 <a href="https://whatsapp.com/channel/0029VaN8WMOHFxP0SLAKKu0P" target="_blank" class="text-4xl text-green-400 transition-transform duration-200 hover:scale-110 hover:text-green-300"><i class="fab fa-whatsapp"></i></a>
+                 <a href="https://github.com/arkhan998" target="_blank" class="text-4xl text-gray-300 transition-transform duration-200 hover:scale-110 hover:text-white"><i class="fab fa-github"></i></a>
+                 <a href="https://www.youtube.com/@technicalmalikoffical" target="_blank" class="text-4xl text-red-500 transition-transform duration-200 hover:scale-110 hover:text-red-400"><i class="fab fa-youtube"></i></a>
+            </div>
+        </main>
+        
+        <footer class="mt-12 text-center text-gray-400">
+            <!-- UPDATED: Developer Name -->
+            <p>Developer <span class="font-bold text-cyan-300">MALIK SAHAB</span></p>
+        </footer>
+    </div>
 
     <script>
-        // Function to show a temporary message box
-        function showMessageBox(message, duration = 3000) {
-            const messageBox = document.getElementById('messageBox');
-            messageBox.textContent = message;
-            messageBox.style.display = 'block';
+        // --- Popup Logic ---
+        const whatsappPopup = document.getElementById('whatsapp-popup');
+        const closePopupButton = document.getElementById('close-popup');
+
+        window.addEventListener('load', () => {
             setTimeout(() => {
-                messageBox.style.display = 'none';
-            }, duration);
-        }
+                whatsappPopup.style.display = 'flex';
+                setTimeout(() => whatsappPopup.style.opacity = '1', 50);
+            }, 1000);
+        });
 
-        // --- URL Shortener Logic ---
-        const longUrlInput = document.getElementById('longUrl');
-        const shortenBtn = document.getElementById('shortenBtn');
-        const shortenedUrlDisplay = document.getElementById('shortenedUrlDisplay');
-        const shortUrlText = document.getElementById('shortUrlText');
-        const copyBtn = document.getElementById('copyBtn');
-        const urlError = document.getElementById('urlError');
+        closePopupButton.addEventListener('click', () => {
+            whatsappPopup.style.opacity = '0';
+            setTimeout(() => whatsappPopup.style.display = 'none', 300);
+        });
+        
+        // --- Downloader Logic (Backend Functionality) ---
+        const downloadBtn = document.getElementById('download-btn');
+        const urlInput = document.getElementById('tiktok-url');
+        const resultDiv = document.getElementById('result');
 
-        const shortenApiUrl = "https://famofcfallxd.serv00.net/apis/famurlshot.php?url=";
-
-        shortenBtn.addEventListener('click', async () => {
-            const longUrl = longUrlInput.value.trim();
-            urlError.classList.add('hidden'); // Hide previous errors
-            shortenedUrlDisplay.classList.add('hidden'); // Hide previous result
-
-            if (!longUrl) {
-                urlError.textContent = "مہربانی کر کے کوئی URL ڈالیں۔";
-                urlError.classList.remove('hidden');
+        downloadBtn.addEventListener('click', () => {
+            const videoUrl = urlInput.value.trim();
+            if (!videoUrl) {
+                displayMessage('error', 'Please paste a TikTok video URL first.');
                 return;
             }
-
-            // Basic URL validation
-            try {
-                new URL(longUrl);
-            } catch (e) {
-                urlError.textContent = "غلط URL فارمیٹ۔ مہربانی کر کے صحیح URL ڈالیں (مثلاً: https://example.com)۔";
-                urlError.classList.remove('hidden');
+            if (!videoUrl.startsWith('http')) {
+                displayMessage('error', 'Please enter a valid URL.');
                 return;
             }
+            fetchVideoInfo(videoUrl);
+        });
 
-            shortenBtn.textContent = "چھوٹا ہو رہا ہے...";
-            shortenBtn.disabled = true;
+        async function fetchVideoInfo(url) {
+            displayMessage('loading', 'Fetching video details, please wait...');
+            const apiKey = 'https://aemt.me/download/tiktokdl?url=';
+            const requestUrl = `${apiKey}${encodeURIComponent(url)}`;
 
             try {
-                const response = await fetch(`${shortenApiUrl}${encodeURIComponent(longUrl)}`);
+                const response = await fetch(requestUrl);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`API error! Status: ${response.status}. The server might be down.`);
                 }
+                const data = await response.json();
 
-                // Attempt to parse as JSON first
-                let data;
-                try {
-                    data = await response.json(); // Try parsing as JSON
-                } catch (jsonError) {
-                    // If JSON parsing fails, try to get it as plain text
-                    data = await response.text();
-                    // If it's still not a URL, it's an error
-                    if (!data.startsWith('http')) {
-                        throw new Error(`API returned unexpected format or error: ${data}`);
-                    }
-                    // If it's a URL in plain text, use it directly
-                    shortUrlText.textContent = data;
-                    shortenedUrlDisplay.classList.remove('hidden');
-                    showMessageBox("لنک چھوٹا ہو گیا!");
-                    return; // Exit function if plain text URL is found
-                }
-
-                // If JSON parsing was successful
-                if (data && data.shortUrl) {
-                    shortUrlText.textContent = data.shortUrl;
-                    shortenedUrlDisplay.classList.remove('hidden');
-                    showMessageBox("لنک چھوٹا ہو گیا!");
+                if (data.status === true && data.result) {
+                    displayResult(data.result);
                 } else {
-                    throw new Error(`API returned invalid JSON response: ${JSON.stringify(data)}`);
+                    throw new Error(data.message || 'Could not process the video. The link might be invalid or private.');
                 }
-
             } catch (error) {
-                console.error("URL Shortener Error:", error);
-                urlError.textContent = `لنک چھوٹا کرنے میں مسئلہ ہوا: ${error.message}۔ دوبارہ کوشش کریں۔`;
-                urlError.classList.remove('hidden');
-                showMessageBox("لنک چھوٹا کرنے میں مسئلہ ہوا!");
-            } finally {
-                shortenBtn.textContent = "چھوٹا کریں";
-                shortenBtn.disabled = false;
+                console.error('Download Error:', error);
+                displayMessage('error', `An error occurred: ${error.message}`);
             }
-        });
-
-        copyBtn.addEventListener('click', () => {
-            const textToCopy = shortUrlText.textContent;
-            if (textToCopy) {
-                // Use document.execCommand for better compatibility in iframe environments
-                const textArea = document.createElement('textarea');
-                textArea.value = textToCopy;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showMessageBox("لنک کاپی ہو گیا!");
-                } catch (err) {
-                    console.error('Copy to clipboard failed:', err);
-                    showMessageBox("لنک کاپی نہیں ہو سکا۔ براہ کرم خود کاپی کریں۔");
-                }
-                document.body.removeChild(textArea);
-            }
-        });
-
-        // --- AI Chatbot Logic ---
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const chatDisplay = document.getElementById('chatDisplay');
-        const chatError = document.getElementById('chatError');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-
-        const chatbotApiUrl = "https://famofcfallxd.serv00.net/apis/famofcai.php?text=";
-
-        // Function to add a message to the chat display
-        function addMessage(message, sender) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('chat-message');
-            if (sender === 'user') {
-                messageElement.classList.add('user-message');
-            } else {
-                messageElement.classList.add('bot-message');
-            }
-            messageElement.textContent = message;
-            chatDisplay.appendChild(messageElement);
-            chatDisplay.scrollTop = chatDisplay.scrollHeight; // Scroll to bottom
         }
 
-        sendBtn.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        async function sendMessage() {
-            const userMessage = chatInput.value.trim();
-            chatError.classList.add('hidden'); // Hide previous errors
-
-            if (!userMessage) {
-                chatError.textContent = "مہربانی کر کے کوئی پیغام ٹائپ کریں۔";
-                chatError.classList.remove('hidden');
-                return;
-            }
-
-            addMessage(userMessage, 'user');
-            chatInput.value = ''; // Clear input
-            sendBtn.disabled = true;
-            loadingIndicator.classList.remove('hidden');
-
-            try {
-                const response = await fetch(`${chatbotApiUrl}${encodeURIComponent(userMessage)}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const botResponse = await response.text(); // API returns plain text
-
-                if (botResponse) {
-                    addMessage(botResponse, 'bot');
-                } else {
-                    throw new Error("API سے خالی جواب ملا۔");
-                }
-
-            } catch (error) {
-                console.error("Chatbot Error:", error);
-                chatError.textContent = `جواب حاصل کرنے میں مسئلہ ہوا: ${error.message}۔ دوبارہ کوشش کریں۔`;
-                chatError.classList.remove('hidden');
-                showMessageBox("چیٹ بوٹ سے بات کرنے میں مسئلہ ہوا!");
-            } finally {
-                sendBtn.disabled = false;
-                loadingIndicator.classList.add('hidden');
-            }
+        function displayMessage(type, message) {
+            let colorClass = type === 'error' ? 'text-red-400' : 'text-cyan-300';
+            let iconHtml = type === 'error' ? '<i class="fas fa-exclamation-circle mr-2"></i>' : '<i class="fas fa-spinner fa-spin mr-2"></i>';
+            resultDiv.innerHTML = `<div class="bg-gray-800/60 p-4 rounded-lg ${colorClass}">${iconHtml}${message}</div>`;
         }
+        
+        function displayResult(result) {
+            resultDiv.innerHTML = '';
+            const video = result.video;
+            const music = result.music;
+            const author = result.author;
+
+            const resultCard = `
+                <div class="bg-black/40 neon-border rounded-lg p-6 text-left animate-fade-in">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <img src="${video.cover}" alt="Video Thumbnail" class="w-full md:w-48 h-auto object-cover rounded-md border-2 border-cyan-500" onerror="this.style.display='none'">
+                        <div class="flex-grow">
+                            <p class="text-lg font-bold text-yellow-300">${video.title || 'TikTok Video'}</p>
+                            <p class="text-sm text-gray-300 mb-4">by @${author.unique_id}</p>
+                            <p class="text-sm text-gray-400 mb-1"><i class="fas fa-play mr-2"></i>Plays: ${video.play_count.toLocaleString()}</p>
+                             <p class="text-sm text-gray-400 mb-4"><i class="fas fa-music mr-2"></i>Music: ${music.title}</p>
+                            
+                            <div class="flex flex-col gap-3 mt-4">
+                                <a href="${video.no_watermark}" target="_blank" class="w-full text-center bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-200 hover:scale-105">
+                                    <i class="fas fa-download mr-2"></i>Download (No Watermark)
+                                </a>
+                                <a href="${video.watermark}" target="_blank" class="w-full text-center bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-200 hover:scale-105">
+                                    <i class="fas fa-download mr-2"></i>Download (With Watermark)
+                                </a>
+                                <a href="${music.play_url}" target="_blank" class="w-full text-center bg-purple-500 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-200 hover:scale-105">
+                                    <i class="fas fa-music mr-2"></i>Download Music (MP3)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            resultDiv.innerHTML = resultCard;
+        }
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fade-in {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in {
+                animation: fade-in 0.5s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
